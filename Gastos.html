@@ -5,7 +5,10 @@
 <title>Gastos Abril</title>
 
 <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2331/2331966.png">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="manifest.json">
+    
 <style>
 body {
     font-family: 'Segoe UI', sans-serif;
@@ -85,6 +88,54 @@ th {
 }
 .summary table td {
     font-weight: bold;
+}
+
+/* RESPONSIVE APP STYLE */
+body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+/* GRID RESPONSIVE */
+.grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+/* CARDS MÁS GRANDES EN CEL */
+.card {
+    transition: transform 0.2s;
+}
+
+.card:active {
+    transform: scale(0.98);
+}
+
+/* TEXTO ADAPTABLE */
+h1 {
+    font-size: clamp(18px, 4vw, 28px);
+}
+
+h2 {
+    font-size: clamp(16px, 3.5vw, 22px);
+}
+
+td, th {
+    font-size: clamp(12px, 3vw, 14px);
+}
+
+/* ESPACIADO EN CEL */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .card-header {
+        padding: 14px;
+    }
+
+    .total {
+        font-size: 14px;
+    }
 }
 </style>
 
