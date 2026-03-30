@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Gastos Abril</title>
+
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2331/2331966.png">
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f6fb;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* CARD */
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+/* HEADER */
+.card-header {
+    padding: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-content {
+    display: none;
+    padding: 10px;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 6px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #222;
+    color: white;
+}
+
+/* COLORS */
+.q1 { border-top: 6px solid #4dabf7; }
+.q2 { border-top: 6px solid #ff922b; }
+
+/* TOTAL */
+.total {
+    margin-top: 8px;
+    padding: 6px;
+    background: black;
+    color: white;
+    text-align: right;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+/* RESUMEN */
+.summary {
+    margin-top: 30px;
+}
+.summary table td {
+    font-weight: bold;
+}
+</style>
+
+<script>
+function toggle(id){
+    let el = document.getElementById(id);
+    el.style.display = el.style.display === "block" ? "none" : "block";
+}
+</script>
+
+</head>
+
+<body>
+
+<h1>💰 Dashboard Gastos Abril</h1>
+
+<div class="grid">
+
+<!-- Q1 -->
+<div class="q1">
+
+<h2>💙 Q1</h2>
+
+<div class="card">
+<div class="card-header" onclick="toggle('q1-renta')">🏠 Renta + Luz</div>
+<div id="q1-renta" class="card-content">
+<table>
+<tr><td>Renta Casa</td><td>$4,000</td></tr>
+<tr><td>Luz</td><td>$5,000</td></tr>
+</table>
+<div class="total">Total: $4,500</div>
+</div>
+</div>
+
+
+<div class="card">
+<div class="card-header" onclick="toggle('q1-salud')">💊 Salud</div>
+<div id="q1-salud" class="card-content">
+<table>
+<tr><td>Med. Diabetes</td><td>$850</td></tr>
+</table>
+<div class="total">Total: $850</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header" onclick="toggle('q1-serv')">🔧 Servicios</div>
+<div id="q1-serv" class="card-content">
+<table>
+<tr><td>Saldo Mamá Semana 1</td><td>$100</td></tr>
+<tr><td>Semana 2</td><td>$100</td></tr>
+<tr><td>Semana 3</td><td>$100</td></tr>
+</table>
+<div class="total">Total: $300</div>
+</div>
+</div>
+
+
+<div class="card">
+<div class="card-header" onclick="toggle('q1-ent')">🎬 Entretenimiento</div>
+<div id="q1-ent" class="card-content">
+<table>
+<tr><td>Netflix</td><td>$249</td></tr>
+<tr><td>YouTube</td><td>$159</td></tr>
+<tr><td>Crunchyroll</td><td>$159</td></tr>
+<tr><td>WPS Office</td><td>$125</td></tr>
+<tr><td>Google One</td><td>$39</td></tr>
+</table>
+<div class="total">Total: $472</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header" onclick="toggle('q1-patas')">🐾 Patas</div>
+<div id="q1-patas" class="card-content">
+<table>
+<tr><td>Arena de Gato</td><td>$500</td></tr>
+<tr><td>Sobres Patas</td><td>$1000</td></tr>
+</table>
+<div class="total">Total: $1,550</div>
+</div>
+</div>
+
+</div>
+
+<!-- Q2 -->
+<div class="q2">
+
+<h2>🧡 Q2</h2>
+
+<div class="card">
+<div class="card-header" onclick="toggle('q2-renta')">🏠 Renta + Luz</div>
+<div id="q2-renta" class="card-content">
+<table>
+<tr><td>Renta Casa</td><td>$4,000</td></tr>
+<tr><td>Luz</td><td>$5,000</td></tr>
+</table>
+<div class="total">Total: $4,500</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header" onclick="toggle('q2-salud')">💊 Salud</div>
+<div id="q2-salud" class="card-content">
+<table>
+<tr><td>Medicina Mamá</td><td>$1,402</td></tr>
+<tr><td>Med. Diabetes</td><td>$850</td></tr>
+</table>
+<div class="total">Total: $2,252</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header" onclick="toggle('q2-serv')">🔧 Servicios</div>
+<div id="q2-serv" class="card-content">
+<table>
+<tr><td>Internet</td><td>$689</td></tr>
+<tr><td>Celular</td><td>$629</td></tr>
+<tr><td>Uber Seguro</td><td>$600</td></tr>
+<tr><td>Agua</td><td>$250</td></tr>
+<tr><td>Gas</td><td>$200</td></tr>
+<tr><td>Saldo Mamá Semana 4</td><td>$100</td></tr>
+</table>
+<div class="total">Total: $2,468</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header" onclick="toggle('q2-ent')">🎬 Entretenimiento</div>
+<div id="q2-ent" class="card-content">
+<table>
+<tr><td>Amazon Prime</td><td>$150</td></tr>
+<tr><td>Spotify</td><td>$139</td></tr>
+</table>
+<div class="total">Total: $448</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-header" onclick="toggle('q2-patas')">🐾 Patas</div>
+<div id="q2-patas" class="card-content">
+<table>
+<tr><td>Croquetas</td><td>$400</td></tr>
+<tr><td>Sobres Patas</td><td>$1050</td></tr>
+</table>
+<div class="total">Total: $1,450</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- RESUMEN DETALLADO -->
+<div class="summary card">
+<h2 style="padding:10px;">📊 Resumen Detallado</h2>
+
+<table>
+<tr><th>Categoria</th><th>Q1</th><th>Q2</th><th>Total</th></tr>
+<tr><td>Renta Casa + Luz</td><td>$4,500</td><td>$4,500</td><td>$9,000</td></tr>
+<tr><td>Ahorro Personal</td><td>$1,000</td><td>$1,000</td><td>$2,000</td></tr>
+<tr><td>Patas Gastos</td><td>$1,550</td><td>$1,450</td><td>$2,600</td></tr>
+<tr><td>Salud</td><td>$850</td><td>$2,252</td><td>$3,102</td></tr>
+<tr><td>Pagos de Servicios</td><td>$300</td><td>$2,468</td><td>$2,768</td></tr>
+<tr><td>Pagos de Entretenimiento</td><td>$472</td><td>$448</td><td>$920</td></tr>
+<tr><td>Surtido Limpieza</td><td>$0</td><td>$1,200</td><td>$1,200</td></tr>
+<tr style="background:black;color:white;">
+<td>TOTAL A APARTAR</td><td>$8,672</td><td>$13,418</td><td>$21,690</td>
+</tr>
+<tr style="background:black;color:white;">
+<td>DINERO LIBRE</td><td>$7,328</td><td>$5,732</td><td>29018</td>
+</tr>
+</table>
+
+</div>
+
+</body>
+</html>
