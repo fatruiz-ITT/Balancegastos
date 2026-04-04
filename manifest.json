@@ -1,15 +1,23 @@
 {
-  "name": "Gastos Abril",
-  "short_name": "Gastos",
-  "start_url": ".",
+  "name": "RuizOs Finances",
+  "short_name": "RuizOs",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#f4f6fb",
-  "theme_color": "#000000",
+  "orientation": "portrait",
+  "background_color": "#0a0c12",
+  "theme_color": "#0a0c12",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/2331/2331966.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/10452/10452815.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/10452/10452815.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
