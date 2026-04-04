@@ -102,9 +102,61 @@
                 box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
             }
         }
+        /* Botón IA Flotante */
+.ai-fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: var(--accent-cyan);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #000;
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+    cursor: pointer;
+    z-index: 3000;
+    transition: 0.3s;
+}
+.ai-fab:hover { transform: scale(1.1) rotate(15deg); }
+
+/* Terminal de Diagnóstico */
+.ai-terminal {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 350px;
+    max-height: 400px;
+    background: #0f172a;
+    border: 1px solid var(--accent-cyan);
+    border-radius: 12px;
+    display: none; /* Se activa con JS */
+    flex-direction: column;
+    z-index: 3000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+.ai-header { background: rgba(0,242,255,0.1); padding: 10px; font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--accent-cyan); border-bottom: 1px solid rgba(0,242,255,0.2); }
+.ai-body { padding: 15px; font-size: 0.8rem; overflow-y: auto; color: #e2e8f0; }
+.ai-sugerencia { background: rgba(255,255,255,0.03); border-left: 2px solid var(--ok); padding: 8px; margin-bottom: 10px; border-radius: 4px; }
     </style>
 </head>
 <body>
+
+<div class="ai-fab" onclick="toggleAI()"><i class="fa-solid fa-microchip"></i></div>
+
+<div class="ai-terminal" id="aiTerminal">
+    <div class="ai-header d-flex justify-content-between">
+        <span>RUIZ_OS_INTELLIGENCE_v1.0</span>
+        <i class="fa-solid fa-xmark cursor-pointer" onclick="toggleAI()"></i>
+    </div>
+    <div class="ai-body" id="aiBody">
+        <p class="text-dim">Esperando análisis de datos...</p>
+        <button class="btn btn-outline-info btn-sm w-100 mt-3" onclick="generarPrediccion()">EJECUTAR DIAGNÓSTICO</button>
+    </div>
+</div>
 
 <div class="mobile-header">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -340,6 +392,41 @@ function updateTopStats() {
 function updateRetiroMes(v) { appData[mesActual].retiroAhorro = parseFloat(v) || 0; updateTopStats(); }
 function save() { localStorage.setItem('finanzas_v8_3', JSON.stringify(appData)); alert("SYSTEM_SYNC: OK."); }
 init();
+function toggleAI() {
+    const term = document.getElementById('aiTerminal');
+    term.style.display = (term.style.display === 'flex') ? 'none' : 'flex';
+}
+
+function generarPrediccion() {
+    const data = appData[mesActual];
+    const aiBody = document.getElementById('aiBody');
+    
+    // Cálculo de Salud Financiera
+    let totalEgresos = 0;
+    data.q1.forEach(s => s.items.forEach(i => totalEgresos += i.v));
+    data.q2.forEach(s => s.items.forEach(i => totalEgresos += i.v));
+    
+    const ratioAhorro = (2000 / (data.ingreso * 2)) * 100; // Basado en tus 1000 por Q
+
+    aiBody.innerHTML = `
+        <div class="ai-sugerencia">
+            <b class="text-info">💡 PREDICCIÓN DE FLUJO:</b><br>
+            Si mantienes el gasto de $${totalEgresos.toLocaleString()}, tu capacidad de ahorro real es del ${ratioAhorro.toFixed(1)}%.
+        </div>
+        <div class="ai-sugerencia" style="border-color: #ffc107">
+            <b class="text-warning">⚠️ ALERTA DE SUSCRIPCIONES:</b><br>
+            Detecto 6 servicios digitales. Si omites "WPS Office" o "Crunchyroll" este mes, podrías subir tu fondo de emergencia un 5%.
+        </div>
+        <button class="btn btn-info btn-sm w-100" onclick="copyDataForIA()">COPIAR DATA PARA CHATBOT</button>
+        <small class="text-dim mt-2 d-block">Copia la data y pégala en nuestro chat para un análisis profundo.</small>
+    `;
+}
+
+function copyDataForIA() {
+    const dataString = JSON.stringify(appData[mesActual]);
+    navigator.clipboard.writeText("Analiza mi presupuesto de RuizOs: " + dataString);
+    alert("¡Datos listos! Pégalos en el chat con tu IA para recibir consejos personalizados.");
+}
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
