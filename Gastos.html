@@ -197,16 +197,19 @@ function render() {
                         <div class="table-responsive">
                             <table class="table table-dark table-borderless mb-0" style="font-size: 0.75rem;">
                                 <thead><tr class="text-dim">
-                                    <th class="ps-4">Apartado.</th><th>Pagado</th><th>Concepto</th><th>Cuenta</th><th class="text-end pe-4">Monto</th>
+                                    <th class="ps-4">Apartado</th>
+                                    <th>Concepto</th>
+                                    <th class="text-center pe-4">Monto</th>
+                                    <th>Pagado</th>
                                 </tr></thead>
                                 <tbody>
                                 ${sec.items.map((it, iIdx) => `
                                 <tr id="row-${q}-${sIdx}-${iIdx}" class="${it.p ? 'paid' : ''}">
-                                    <td class="ps-4"><input type="checkbox" class="form-check-input chk-op" ${it.op?'checked':''} onclick="toggle(event, '${q}',${sIdx},${iIdx},'op')"></td>
-                                    <td><input type="checkbox" class="form-check-input chk-pay" ${it.p?'checked':''} onclick="toggle(event, '${q}',${sIdx},${iIdx},'p')"></td>
-                                    <td class="py-2">${it.n}</td>
-                                    <td><input type="text" class="input-bank" value="${it.b || ''}" placeholder="Banco" onclick="event.stopPropagation()" onchange="updateVal('${q}',${sIdx},${iIdx},'b',this.value)"></td>
-                                    <td class="text-end pe-4"><input type="number" class="input-price" value="${it.v}" onclick="event.stopPropagation()" onchange="updateVal('${q}',${sIdx},${iIdx},'v',this.value)"></td>
+                                <td class="ps-4"><input type="checkbox" class="form-check-input chk-op" ${it.op?'checked':''} onclick="toggle(event, '${q}',${sIdx},${iIdx},'op')"></td>
+                                <td class="py-2">${it.n}</td>
+                                <td class="text-mid pe-2"><input type="number" class="input-price" value="${it.v}" onclick="event.stopPropagation()" onchange="updateVal('${q}',${sIdx},${iIdx},'v',this.value)"></td>
+                                     <td><input type="checkbox" class="form-check-input chk-pay" ${it.p?'checked':''} onclick="toggle(event, '${q}',${sIdx},${iIdx},'p')"></td>
+                                    
                                 </tr>`).join('')}
                                 </tbody>
                             </table>
