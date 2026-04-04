@@ -1,265 +1,348 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Gastos Abril</title>
-<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2331/2331966.png">
-<style>
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background: #f4f6fb;
-    margin: 0;
-    padding: 20px;
-}
-h1 {
-    text-align: center;
-    margin-bottom: 25px;
-}
-/* GRID */
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-/* CARD */
-.card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    overflow: hidden;
-    margin-bottom: 10px;
-}
-/* HEADER */
-.card-header {
-    padding: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-}
-.card-content {
-    display: none;
-    padding: 10px;
-}
-/* TABLE */
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-th, td {
-    padding: 6px;
-    border-bottom: 1px solid #ddd;
-}
-th {
-    background: #222;
-    color: white;
-}
-/* Estilo para los Checkboxes */
-.cb-col { width: 30px; text-align: center; }
-input[type="checkbox"] { transform: scale(1.2); cursor: pointer; }
-
-/* COLORS */
-.q1 { border-top: 6px solid #4dabf7; }
-.q2 { border-top: 6px solid #ff922b; }
-/* TOTAL */
-.total {
-    margin-top: 8px;
-    padding: 6px;
-    background: black;
-    color: white;
-    text-align: right;
-    border-radius: 6px;
-    font-size: 13px;
-}
-/* RESUMEN */
-.summary {
-    margin-top: 30px;
-}
-.summary table td {
-    font-weight: bold;
-}
-
-/* Responsive para cel */
-@media (max-width: 600px) {
-    .grid { grid-template-columns: 1fr; }
-}
-</style>
-<script>
-function toggle(id){
-    let el = document.getElementById(id);
-    el.style.display = el.style.display === "block" ? "none" : "block";
-}
-
-// Función para guardar el estado del checkbox
-function saveStatus(id) {
-    const cb = document.getElementById(id);
-    localStorage.setItem(id, cb.checked);
-}
-
-// Función para cargar los estados al abrir la app
-window.onload = function() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(cb => {
-        const saved = localStorage.getItem(cb.id);
-        if (saved === "true") {
-            cb.checked = true;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RuizOs | FINANCES 2026</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;600&display=swap');
+        :root {
+            --bg-dark: #0a0c12;
+            --panel-bg: #12151f;
+            --accent-cyan: #00f2ff;
+            --risk: #ff4d4d;
+            --ok: #00ff9c;
+            --text-dim: #64748b;
         }
-    });
-};
-</script>
+        body { background-color: var(--bg-dark); color: #f8fafc; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+        
+        .sidebar-nav { height: 100vh; background: var(--panel-bg); border-right: 1px solid #1e293b; position: sticky; top: 0; overflow-y: auto; z-index: 100; }
+        .nav-item {
+            padding: 15px 25px; color: var(--text-dim); cursor: pointer; transition: 0.3s;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; border-left: 4px solid transparent;
+        }
+        .nav-item:hover { background: rgba(255,255,255,0.02); color: #fff; }
+        .nav-item.active { 
+            background: linear-gradient(90deg, rgba(0, 242, 255, 0.08) 0%, transparent 100%);
+            border-left-color: var(--accent-cyan); color: var(--accent-cyan); font-weight: 700;
+        }
+
+        .status-card { background: var(--panel-bg); border: 1px solid #1e293b; border-radius: 16px; padding: 20px; height: 100%; }
+        .risk { color: var(--risk); }
+        .ok { color: var(--ok); }
+        
+        .progress-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
+        .progress-container { background: #080a0f; border-radius: 50px; height: 8px; overflow: hidden; border: 1px solid #1e293b; }
+        .progress-fill { height: 100%; transition: width 0.5s ease; }
+        .fill-tasks { background: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan); }
+        .fill-money { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+
+        .paid { text-decoration: line-through; opacity: 0.35; }
+        .input-price {
+            background: transparent; border: 1px solid #334155; color: #fff;
+            border-radius: 6px; padding: 2px 8px; width: 85px; text-align: right; font-family: 'JetBrains Mono';
+        }
+        .input-price:focus { border-color: var(--accent-cyan); outline: none; background: rgba(0, 242, 255, 0.05); }
+
+        .accordion-item { background: transparent; border: 1px solid #1e293b; margin-bottom: 8px; border-radius: 12px !important; overflow: hidden; }
+        .accordion-button { background: transparent !important; color: #fff !important; box-shadow: none !important; }
+        .accordion-button::after { filter: invert(1); }
+        
+        .form-check-input { cursor: pointer; background-color: #1e293b; border-color: #334155; }
+        .form-check-input:checked { background-color: var(--ok); border-color: var(--ok); }
+
+        .btn-update {
+            background: var(--accent-cyan); color: #000; font-weight: 800; border-radius: 8px;
+            padding: 12px 24px; border: none; transition: 0.3s;
+        }
+        .btn-update:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        @media (max-width: 768px) { 
+            .sidebar-nav { height: auto; flex-direction: row; display: flex; overflow-x: auto; position: relative; }
+            .nav-item { white-space: nowrap; padding: 10px 15px; }
+        }
+    </style>
 </head>
 <body>
-<h1>💰 Dashboard Gastos Abril</h1>
-<div class="grid">
-<div class="q1">
-<h2>💙 Q1</h2>
-<div class="card">
-<div class="card-header" onclick="toggle('q1-renta')">🏠 Renta + Luz</div>
-<div id="q1-renta" class="card-content">
-<table>
-<tr><td class="cb-col"><input type="checkbox" id="q1-r1" onclick="saveStatus('q1-r1')"></td><td>Renta Casa</td><td>$4,000</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-r2" onclick="saveStatus('q1-r2')"></td><td>Luz</td><td>$500</td></tr>
-</table>
-<div class="total">Total: $4,500</div>
+
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-md-2 sidebar-nav">
+            <div class="p-4 border-bottom border-dark text-center d-none d-md-block">
+                <div class="h5 mb-0 fw-bold">RUÍZ<span style="color:var(--accent-cyan)">.OS</span></div>
+                <small class="text-dim">v7.2 Stable</small>
+            </div>
+            <div id="month-list"></div>
+        </div>
+
+        <div class="col-md-10 p-lg-5 p-4">
+            <div class="row align-items-center mb-5">
+                <div class="col-md-7">
+                    <h1 class="fw-bold mb-3" id="title-mes">---</h1>
+                    <div class="row g-4">
+                        <div class="col-md-5">
+                            <div class="progress-label">Checklist de Operaciones</div>
+                            <div class="progress-container"><div class="progress-fill fill-tasks" id="prog-t"></div></div>
+                            <div class="ok small fw-bold mt-1" id="prog-t-text">0%</div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="progress-label">Flujo de Capital Pagado</div>
+                            <div class="progress-container"><div class="progress-fill fill-money" id="prog-m"></div></div>
+                            <div class="ok small fw-bold mt-1" id="prog-m-text">0%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 text-md-end mt-4 mt-md-0">
+                    <button class="btn-update" onclick="save()">SINC_SYSTEM_DATA</button>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-md-4 mb-3">
+                    <div class="status-card">
+                        <div class="progress-label">Saldo Remanente Libre</div>
+                        <div class="kpi-value ok h2 fw-bold" id="kpi-libre">$0</div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="status-card">
+                        <div class="progress-label">Egresos Totales (Presupuesto)</div>
+                        <div class="kpi-value risk h2 fw-bold" id="kpi-gastos">$0</div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="status-card" style="border-color: var(--accent-cyan); background: rgba(0, 242, 255, 0.03);">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="progress-label" style="color: var(--accent-cyan)">Fondo Total Acumulado</div>
+                                <div class="h2 fw-bold mb-0" id="kpi-ahorro-global">$0</div>
+                            </div>
+                            <div class="text-end">
+                                <div class="progress-label">Retiro <span id="mes-label-retiro">...</span></div>
+                                <input type="number" id="gasto-ahorro" class="input-price" 
+                                       style="width: 90px; color: var(--risk); border-color: rgba(255, 77, 77, 0.3);" 
+                                       placeholder="$ 0" onchange="updateRetiroMes(this.value)">
+                            </div>
+                        </div>
+                        <div class="mt-2 pt-2 border-top border-dark d-flex justify-content-between">
+                            <small class="text-dim">Ahorro real este mes:</small>
+                            <small class="ok fw-bold" id="kpi-ahorro-mes">$0</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="p-3 mb-3 border-start border-info border-4 bg-dark">
+                        <h6 class="fw-bold mb-0">QUINCENA ALPHA</h6>
+                        <small class="text-dim" id="date-q1"></small>
+                    </div>
+                    <div class="accordion" id="accQ1"></div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="p-3 mb-3 border-start border-warning border-4 bg-dark">
+                        <h6 class="fw-bold mb-0">QUINCENA OMEGA</h6>
+                        <small class="text-dim" id="date-q2"></small>
+                    </div>
+                    <div class="accordion" id="accQ2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
-<div class="card">
-<div class="card-header" onclick="toggle('q1-salud')">💊 Salud</div>
-<div id="q1-salud" class="card-content">
-<table>
-<tr><td class="cb-col"><input type="checkbox" id="q1-s1" onclick="saveStatus('q1-s1')"></td><td>Tiras para azucar</td><td>$350</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-s2" onclick="saveStatus('q1-s2')"></td><td>Metformina</td><td>$50</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-s3" onclick="saveStatus('q1-s3')"></td><td>Colitis</td><td>$200</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-s4" onclick="saveStatus('q1-s4')"></td><td>Medicina Extra</td><td>$250</td></tr>
-</table>
-<div class="total">Total: $850</div>
-</div>
-</div>
-<div class="card">
-<div class="card-header" onclick="toggle('q1-serv')">🔧 Servicios</div>
-<div id="q1-serv" class="card-content">
-<table>
-<tr><td class="cb-col"><input type="checkbox" id="q1-sv1" onclick="saveStatus('q1-sv1')"></td><td>Saldo Mamá Semana 1</td><td>$100</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-sv2" onclick="saveStatus('q1-sv2')"></td><td>Semana 2</td><td>$100</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-sv3" onclick="saveStatus('q1-sv3')"></td><td>Semana 3</td><td>$100</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-sv4" onclick="saveStatus('q1-sv4')"></td><td>Revolut Premium</td><td>$180</td></tr>
-</table>
-<div class="total">Total: $480</div>
-</div>
-</div>
-<div class="card">
-<div class="card-header" onclick="toggle('q1-ent')">🎬 Entretenimiento</div>
-<div id="q1-ent" class="card-content">
-<table>
-<tr><td class="cb-col"><input type="checkbox" id="q1-e1" onclick="saveStatus('q1-e1')"></td><td>Netflix</td><td>$249</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-e2" onclick="saveStatus('q1-e2')"></td><td>YouTube</td><td>$159</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-e3" onclick="saveStatus('q1-e3')"></td><td>Crunchyroll</td><td>$159</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-e4" onclick="saveStatus('q1-e4')"></td><td>Disney</td><td>$249</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-e5" onclick="saveStatus('q1-e5')"></td><td>WPS Office</td><td>$125</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-e6" onclick="saveStatus('q1-e6')"></td><td>Google One</td><td>$39</td></tr>
-</table>
-<div class="total">Total: $721</div>
-</div>
-</div>
-<div class="card">
-<div class="card-header" onclick="toggle('q1-patas')">🐾 Patas</div>
-<div id="q1-patas" class="card-content">
-<table>
-<tr><td class="cb-col"><input type="checkbox" id="q1-p1" onclick="saveStatus('q1-p1')"></td><td>Arena de Gato</td><td>$500</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q1-p2" onclick="saveStatus('q1-p2')"></td><td>Sobres Patas</td><td>$1000</td></tr>
-</table>
-<div class="total">Total: $1,550</div>
-</div>
-</div>
-</div>
-<div class="q2">
-<h2>🧡 Q2</h2>
-<div class="card">
-<div class="card-header" onclick="toggle('q2-renta')">🏠 Renta + Luz</div>
-<div id="q2-renta" class="card-content">
-<table>
-<tr><td class="cb-col"><input type="checkbox" id="q2-r1" onclick="saveStatus('q2-r1')"></td><td>Renta Casa</td><td>$4,000</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q2-r2" onclick="saveStatus('q2-r2')"></td><td>Luz</td><td>$500</td></tr>
-</table>
-<div class="total">Total: $4,500</div>
-</div>
-</div>
-<div class="card">
-  <div class="card-header" onclick="toggle('q2-salud')">💊 Salud</div>
-  <div id="q2-salud" class="card-content">
-    <table>
-      <tr><td class="cb-col"><input type="checkbox" id="q2-s1" onclick="saveStatus('q2-s1')"></td><td>Tiras para azúcar</td><td>$350</td></tr>
-      <tr><td class="cb-col"><input type="checkbox" id="q2-s2" onclick="saveStatus('q2-s2')"></td><td>Metformina</td><td>$50</td></tr>
-      <tr><td class="cb-col"><input type="checkbox" id="q2-s3" onclick="saveStatus('q2-s3')"></td><td>Medicina Extra</td><td>$200</td></tr>
-      <tr style="font-weight: bold; background-color: #f9f9f9;">
-        <td class="cb-col"><input type="checkbox" id="q2-sm" onclick="saveStatus('q2-sm')"></td>
-        <td>Medicina Mamá</td>
-        <td>$1,935</td>
-      </tr>
-      <tr><td class="cb-col"></td><td style="padding-left: 20px; color: #666; font-size: 0.9em;">↳ Omega 3</td><td style="color: #666; font-size: 0.9em;">$298</td></tr>
-       <tr><td class="cb-col"></td><td style="padding-left: 20px; color: #666; font-size: 0.9em;">↳ NAD + Resveratrol</td><td style="color: #666; font-size: 0.9em;">$498</td></tr>
-        <tr><td class="cb-col"></td><td style="padding-left: 20px; color: #666; font-size: 0.9em;">↳ Magnesio</td><td style="color: #666; font-size: 0.9em;">$298</td></tr>
-      <tr><td class="cb-col"></td><td style="padding-left: 20px; color: #666; font-size: 0.9em;">↳ Cetrum Multivitaminico</td><td style="color: #666; font-size: 0.9em;">$303</td></tr>
-      <tr><td class="cb-col"></td><td style="padding-left: 20px; color: #666; font-size: 0.9em;">↳ Cardio Mariano + NAC</td><td style="color: #666; font-size: 0.9em;">$298</td></tr>
-       <tr><td class="cb-col"></td><td style="padding-left: 20px; color: #666; font-size: 0.9em;">↳ Betabel Complex</td><td style="color: #666; font-size: 0.9em;">$237</td></tr>
-      </table>
-    <div class="total">Total: $2,535</div>
-  </div>
-</div>
-<div class="card">
-<div class="card-header" onclick="toggle('q2-serv')">🔧 Servicios</div>
-<div id="q2-serv" class="card-content">
-<table>
-<tr><td class="cb-col"><input type="checkbox" id="q2-sv1" onclick="saveStatus('q2-sv1')"></td><td>Internet</td><td>$689</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q2-sv2" onclick="saveStatus('q2-sv2')"></td><td>Celular</td><td>$629</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q2-sv3" onclick="saveStatus('q2-sv3')"></td><td>Uber Seguro</td><td>$600</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q2-sv4" onclick="saveStatus('q2-sv4')"></td><td>Agua</td><td>$250</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q2-sv5" onclick="saveStatus('q2-sv5')"></td><td>Gas</td><td>$200</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q2-sv6" onclick="saveStatus('q2-sv6')"></td><td>Saldo Mamá Semana 4</td><td>$100</td></tr>
-</table>
-<div class="total">Total: $2,468</div>
-</div>
-</div>
-<div class="card">
-<div class="card-header" onclick="toggle('q2-ent')">🎬 Entretenimiento</div>
-<div id="q2-ent" class="card-content">
-<table>
-<tr><td class="cb-col"><input type="checkbox" id="q2-e1" onclick="saveStatus('q2-e1')"></td><td>Amazon Prime</td><td>$150</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q2-e2" onclick="saveStatus('q2-e2')"></td><td>Spotify</td><td>$139</td></tr>
-</table>
-<div class="total">Total: $448</div>
-</div>
-</div>
-<div class="card">
-<div class="card-header" onclick="toggle('q2-patas')">🐾 Patas</div>
-<div id="q2-patas" class="card-content">
-<table>
-<tr><td class="cb-col"><input type="checkbox" id="q2-p1" onclick="saveStatus('q2-p1')"></td><td>Croquetas</td><td>$400</td></tr>
-<tr><td class="cb-col"><input type="checkbox" id="q2-p2" onclick="saveStatus('q2-p2')"></td><td>Sobres Patas</td><td>$1050</td></tr>
-</table>
-<div class="total">Total: $1,450</div>
-</div>
-</div>
-</div>
-</div>
-<div class="summary card">
-<h2 style="padding:10px;">📊 Resumen Detallado</h2>
-<table>
-<tr><th>Categoria</th><th>Q1</th><th>Q2</th><th>Total</th></tr>
-<tr><td>Renta Casa + Luz</td><td>$4,500</td><td>$4,500</td><td>$9,000</td></tr>
-<tr><td>Ahorro Personal</td><td>$1,000</td><td>$1,000</td><td>$2,000</td></tr>
-<tr><td>Patas Gastos</td><td>$1,550</td><td>$1,450</td><td>$2,600</td></tr>
-<tr><td>Salud</td><td>$850</td><td>$2,535</td><td>$3,385</td></tr>
-<tr><td>Pagos de Servicios</td><td>$480</td><td>$2,468</td><td>$2,768</td></tr>
-<tr><td>Pagos de Entretenimiento</td><td>$721</td><td>$448</td><td>$920</td></tr>
-<tr><td>Surtido Limpieza</td><td>$0</td><td>$1,200</td><td>$1,200</td></tr>
-<tr style="background:black;color:white;">
-<td>TOTAL A APARTAR</td><td>$9,101</td><td>$13,601</td><td>$22,702</td>
-</tr>
-<tr style="background:black;color:white;">
-<td>DINERO LIBRE</td><td>$5,899</td><td>$1,399 + 3,200 bonos</td><td>30,000</td>
-</tr>
-</table>
-</div>
+
+<script>
+const calendarioNomina = {
+    "Abril": { q1: "01 Abr", q2: "17 Abr" },
+    "Mayo": { q1: "30 Abr", q2: "15 May" },
+    "Junio": { q1: "29 May", q2: "12 Jun" },
+    "Julio": { q1: "26 Jun", q2: "10 Jul" },
+    "Agosto": { q1: "24 Jul", q2: "07 Ago" },
+    "Septiembre": { q1: "21 Ago", q2: "04 Sep" },
+    "Octubre": { q1: "18 Sep", q2: "01 Oct" },
+    "Noviembre": { q1: "16 Oct", q2: "30 Oct" },
+    "Diciembre": { q1: "13 Nov", q2: "25 Nov" }
+};
+
+let mesActual = "Abril";
+let appData = JSON.parse(localStorage.getItem('finanzas_v7_2')) || {};
+
+const plantillaMaestra = {
+    q1: [
+        { id: "q1r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, p: false}, {n: "Luz", v: 500, p: false}] },
+        { id: "q1s", cat: "💊 Salud", icon: "fa-kit-medical", items: [{n: "Tiras azúcar", v: 350, p: false}, {n: "Metformina", v: 50, p: false}, {n: "Colitis", v: 200, p: false}, {n: "Medicina Extra", v: 250, p: false}] },
+        { id: "q1v", cat: "🔧 Servicios", icon: "fa-server", items: [{n: "Saldo Mamá Semana1", v: 100, p: false}, {n: "Saldo Mamá Semana2", v: 100, p: false}, {n: "Saldo Mamá Semana3", v: 100, p: false}, {n: "Revolut Premium", v: 180, p: false}] },
+        { id: "q1e", cat: "🎬 Ocio", icon: "fa-play", items: [{n: "Netflix", v: 249, p: false}, {n: "YouTube", v: 159, p: false}, {n: "Crunchyroll", v: 159, p: false}, {n: "Disney", v: 249, p: false}, {n: "WPS Office", v: 125, p: false}, {n: "Google One", v: 39, p: false}] },
+        { id: "q1p", cat: "🐾 Patas", icon: "fa-paw", items: [{n: "Arena Gato", v: 500, p: false}, {n: "Sobres Patas", v: 1000, p: false}] },
+        { id: "q1a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, p: false},{n: "Bitcoin Compra", v: 1000, p: false}] }
+    ],
+    q2: [
+        { id: "q2r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, p: false}, {n: "Luz", v: 500, p: false}] },
+        { id: "q2m", cat: "💊 Salud Familiar", icon: "fa-heart-pulse", items: [
+            {n: "Tiras azúcar", v: 350, p: false}, {n: "Metformina", v: 50, p: false}, {n: "Medicina Extra", v: 200, p: false},
+            {n: "↳ Omega 3", v: 298, p: false}, {n: "↳ NAD + Resveratrol", v: 498, p: false}, {n: "↳ Magnesio", v: 298, p: false},
+            {n: "↳ Cetrum Multivitaminico", v: 303, p: false}, {n: "↳ Cardio Mariano + NAC", v: 298, p: false}, {n: "↳ Betabel Complex", v: 237, p: false}
+        ]},
+        { id: "q2v", cat: "🔧 Conectividad", icon: "fa-wifi", items: [{n: "Telnor", v: 349, p: false}, {n: "Izzy", v: 330, p: false}, {n: "At&t Plan", v: 629, p: false}, {n: "Uber Seguro", v: 600, p: false}, {n: "Agua", v: 250, p: false}, {n: "Gas", v: 200, p: false}, {n: "Saldo Mamá S4", v: 100, p: false}] },
+        { id: "q2e", cat: "🎬 Entretenimiento", icon: "fa-music", items: [{n: "Amazon Prime", v: 150, p: false}, {n: "Spotify", v: 139, p: false}] },
+        { id: "q2p", cat: "🐾 Patas", icon: "fa-cat", items: [{n: "Croquetas", v: 400, p: false}, {n: "Sobres Patas", v: 1050, p: false}] },
+        { id: "q2l", cat: "🧹 Limpieza", icon: "fa-broom", items: [{n: "Surtido Limpieza", v: 1200, p: false}] },
+        { id: "q2a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, p: false}] }
+    ],
+    ingreso: 30000, 
+    bonos: 3200,
+    retiroAhorro: 0
+};
+
+function init() {
+    const list = document.getElementById('month-list');
+    list.innerHTML = '';
+    Object.keys(calendarioNomina).forEach(m => {
+        const div = document.createElement('div');
+        div.className = `nav-item ${m === mesActual ? 'active' : ''}`;
+        div.innerHTML = m.toUpperCase();
+        div.onclick = () => { 
+            mesActual = m; 
+            document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); 
+            div.classList.add('active'); 
+            render(); 
+        };
+        list.appendChild(div);
+        if (!appData[m]) appData[m] = JSON.parse(JSON.stringify(plantillaMaestra));
+    });
+    render();
+}
+
+function render() {
+    document.getElementById('title-mes').innerText = mesActual.toUpperCase();
+    const data = appData[mesActual];
+    const fechas = calendarioNomina[mesActual];
+
+    document.getElementById('date-q1').innerText = `PAGO ESTIMADO: ${fechas.q1}`;
+    document.getElementById('date-q2').innerText = `PAGO ESTIMADO: ${fechas.q2}`;
+
+    ['q1', 'q2'].forEach(q => {
+        const container = document.getElementById(q === 'q1' ? 'accQ1' : 'accQ2');
+        container.innerHTML = '';
+        data[q].forEach((sec, sIdx) => {
+            let totalSec = sec.items.reduce((a, b) => a + b.v, 0);
+            const accordionHtml = `
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#c-${sec.id}">
+                            <div class="d-flex justify-content-between w-100 pe-3 align-items-center">
+                                <span><i class="fa-solid ${sec.icon} me-3 opacity-50"></i>${sec.cat}</span>
+                                <span class="badge bg-dark text-info border border-info border-opacity-25">$${totalSec.toLocaleString()}</span>
+                            </div>
+                        </button>
+                    </h2>
+                    <div id="c-${sec.id}" class="accordion-collapse collapse">
+                        <div class="accordion-body p-0 pt-2">
+                            <table class="table table-dark table-borderless mb-0">
+                                ${sec.items.map((it, iIdx) => {
+                                    const isSub = it.n.includes("↳");
+                                    const rowId = `row-${q}-${sIdx}-${iIdx}`;
+                                    return `
+                                    <tr id="${rowId}" class="${it.p ? 'paid' : ''}">
+                                        <td width="40" class="ps-4">
+                                            <input type="checkbox" class="form-check-input" ${it.p?'checked':''} 
+                                                onclick="quickToggle('${q}', ${sIdx}, ${iIdx}, '${rowId}')">
+                                        </td>
+                                        <td class="py-2 ${isSub ? 'ps-5 opacity-75 small' : ''}">${it.n}</td>
+                                        <td class="text-end pe-4">
+                                            <input type="number" class="input-price" value="${it.v}" 
+                                                onchange="updateVal('${q}', ${sIdx}, ${iIdx}, this.value)">
+                                        </td>
+                                    </tr>`;
+                                }).join('')}
+                            </table>
+                        </div>
+                    </div>
+                </div>`;
+            container.innerHTML += accordionHtml;
+        });
+    });
+    updateTopStats();
+}
+
+function updateVal(q, sIdx, iIdx, v) {
+    appData[mesActual][q][sIdx].items[iIdx].v = parseFloat(v) || 0;
+    updateTopStats();
+}
+
+function quickToggle(q, sIdx, iIdx, rowId) {
+    const item = appData[mesActual][q][sIdx].items[iIdx];
+    item.p = !item.p;
+    const row = document.getElementById(rowId);
+    if (item.p) row.classList.add('paid');
+    else row.classList.remove('paid');
+    updateTopStats();
+}
+
+function updateTopStats() {
+    let globalAhorro = 0;
+    let mesAhorroCheck = 0;
+    let sumTotalMes = 0;
+    let sumPagadoMes = 0;
+    let itemsTotalMes = 0;
+    let itemsCheckMes = 0;
+
+    Object.keys(appData).forEach(m => {
+        let ahorroMesLoop = 0;
+        let retiroMesLoop = appData[m].retiroAhorro || 0;
+        
+        ['q1', 'q2'].forEach(q => {
+            appData[m][q].forEach(sec => {
+                sec.items.forEach(it => {
+                    if (it.p && sec.cat.includes("Ahorro")) ahorroMesLoop += it.v;
+                    if (m === mesActual) {
+                        itemsTotalMes++;
+                        sumTotalMes += it.v;
+                        if (it.p) { itemsCheckMes++; sumPagadoMes += it.v; }
+                    }
+                });
+            });
+        });
+        globalAhorro += (ahorroMesLoop - retiroMesLoop);
+        if (m === mesActual) mesAhorroCheck = ahorroMesLoop;
+    });
+
+    const dataActual = appData[mesActual];
+    document.getElementById('mes-label-retiro').innerText = mesActual;
+    document.getElementById('gasto-ahorro').value = dataActual.retiroAhorro || "";
+    document.getElementById('kpi-ahorro-global').innerText = `$${globalAhorro.toLocaleString()}`;
+    document.getElementById('kpi-ahorro-mes').innerText = `$${mesAhorroCheck.toLocaleString()}`;
+    document.getElementById('kpi-gastos').innerText = `$${sumTotalMes.toLocaleString()}`;
+
+    const tieneBonos = mesActual === "Mayo" || dataActual.q2.some(s => s.cat.includes("Limpieza"));
+    const ingresoTotal = dataActual.ingreso + (tieneBonos ? dataActual.bonos : 0);
+    document.getElementById('kpi-libre').innerText = `$${(ingresoTotal - sumTotalMes).toLocaleString()}`;
+
+    let pT = Math.round((itemsCheckMes / itemsTotalMes) * 100) || 0;
+    document.getElementById('prog-t').style.width = pT + '%';
+    document.getElementById('prog-t-text').innerText = `${pT}% (${itemsCheckMes}/${itemsTotalMes})`;
+
+    let pM = Math.round((sumPagadoMes / sumTotalMes) * 100) || 0;
+    document.getElementById('prog-m').style.width = pM + '%';
+    document.getElementById('prog-m-text').innerText = `${pM}% ($${sumPagadoMes.toLocaleString()})`;
+}
+
+function updateRetiroMes(valor) {
+    appData[mesActual].retiroAhorro = parseFloat(valor) || 0;
+    updateTopStats();
+}
+
+function save() {
+    localStorage.setItem('finanzas_v7_2', JSON.stringify(appData));
+    alert("KERNEL: Sincronización local exitosa.");
+}
+
+init();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+```
