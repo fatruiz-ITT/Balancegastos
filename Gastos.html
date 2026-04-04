@@ -101,15 +101,23 @@
 
             <div class="row mb-5">
                 <div class="col-md-4 mb-3">
-                    <div class="status-card">
-                        <div class="progress-label">Saldo Remanente Libre</div>
-                        <div class="kpi-value ok h2 fw-bold" id="kpi-libre">$0</div>
+                    <div class="status-card" style="border-left: 4px solid var(--accent-cyan)">
+                        <div class="progress-label">Q1: Para Despensa</div>
+                        <div class="h2 fw-bold ok" id="kpi-q1-libre">$0</div>
+                        <div class="d-flex justify-content-between mt-2 border-top border-dark pt-2">
+                            <small class="text-dim">Egresos Q1:</small>
+                            <small class="risk fw-bold" id="kpi-q1-gastos">$0</small>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <div class="status-card">
-                        <div class="progress-label">Egresos Totales (Presupuesto)</div>
-                        <div class="kpi-value risk h2 fw-bold" id="kpi-gastos">$0</div>
+                    <div class="status-card" style="border-left: 4px solid #ffc107">
+                        <div class="progress-label">Q2: Para Despensa</div>
+                        <div class="h2 fw-bold ok" id="kpi-q2-libre">$0</div>
+                        <div class="d-flex justify-content-between mt-2 border-top border-dark pt-2">
+                            <small class="text-dim">Egresos Q2:</small>
+                            <small class="risk fw-bold" id="kpi-q2-gastos">$0</small>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
@@ -192,7 +200,7 @@ const plantillaMaestra = {
         { id: "q2l", cat: "🧹 Limpieza", icon: "fa-broom", items: [{n: "Surtido Limpieza", v: 1200, p: false}] },
         { id: "q2a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, p: false}] }
     ],
-    ingreso: 30000, 
+    pagoQuincenal: 15000,
     bonos: 3200,
     retiroAhorro: 0
 };
@@ -285,10 +293,9 @@ function quickToggle(q, sIdx, iIdx, rowId) {
 function updateTopStats() {
     let globalAhorro = 0;
     let mesAhorroCheck = 0;
-    let sumTotalMes = 0;
-    let sumPagadoMes = 0;
-    let itemsTotalMes = 0;
-    let itemsCheckMes = 0;
+    let q1Gasto = 0, q2Gasto = 0;
+    let qPagadoMes = 0, qTotalMesGasto = 0;
+    let itemsTotalMes = 0, itemsCheckMes = 0;
 
     Object.keys(appData).forEach(m => {
         let ahorroMesLoop = 0;
@@ -300,8 +307,8 @@ function updateTopStats() {
                     if (it.p && sec.cat.includes("Ahorro")) ahorroMesLoop += it.v;
                     if (m === mesActual) {
                         itemsTotalMes++;
-                        sumTotalMes += it.v;
-                        if (it.p) { itemsCheckMes++; sumPagadoMes += it.v; }
+                        if (q === 'q1') q1Gasto += it.v; else q2Gasto += it.v;
+                        if (it.p) { itemsCheckMes++; qPagadoMes += it.v; }
                     }
                 });
             });
@@ -311,23 +318,31 @@ function updateTopStats() {
     });
 
     const dataActual = appData[mesActual];
+    qTotalMesGasto = q1Gasto + q2Gasto;
+
     document.getElementById('mes-label-retiro').innerText = mesActual;
     document.getElementById('gasto-ahorro').value = dataActual.retiroAhorro || "";
     document.getElementById('kpi-ahorro-global').innerText = `$${globalAhorro.toLocaleString()}`;
     document.getElementById('kpi-ahorro-mes').innerText = `$${mesAhorroCheck.toLocaleString()}`;
-    document.getElementById('kpi-gastos').innerText = `$${sumTotalMes.toLocaleString()}`;
 
     const tieneBonos = mesActual === "Mayo" || dataActual.q2.some(s => s.cat.includes("Limpieza"));
-    const ingresoTotal = dataActual.ingreso + (tieneBonos ? dataActual.bonos : 0);
-    document.getElementById('kpi-libre').innerText = `$${(ingresoTotal - sumTotalMes).toLocaleString()}`;
+    const ingresoQ2 = dataActual.pagoQuincenal + (tieneBonos ? dataActual.bonos : 0);
 
+    // Actualización de KPIs Quincenales
+    document.getElementById('kpi-q1-libre').innerText = `$${(dataActual.pagoQuincenal - q1Gasto).toLocaleString()}`;
+    document.getElementById('kpi-q1-gastos').innerText = `$${q1Gasto.toLocaleString()}`;
+    
+    document.getElementById('kpi-q2-libre').innerText = `$${(ingresoQ2 - q2Gasto).toLocaleString()}`;
+    document.getElementById('kpi-q2-gastos').innerText = `$${q2Gasto.toLocaleString()}`;
+
+    // Barras de Progreso
     let pT = Math.round((itemsCheckMes / itemsTotalMes) * 100) || 0;
     document.getElementById('prog-t').style.width = pT + '%';
     document.getElementById('prog-t-text').innerText = `${pT}% (${itemsCheckMes}/${itemsTotalMes})`;
 
-    let pM = Math.round((sumPagadoMes / sumTotalMes) * 100) || 0;
+    let pM = Math.round((qPagadoMes / qTotalMesGasto) * 100) || 0;
     document.getElementById('prog-m').style.width = pM + '%';
-    document.getElementById('prog-m-text').innerText = `${pM}% ($${sumPagadoMes.toLocaleString()})`;
+    document.getElementById('prog-m-text').innerText = `${pM}% ($${qPagadoMes.toLocaleString()})`;
 }
 
 function updateRetiroMes(valor) {
@@ -345,4 +360,3 @@ init();
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-```
