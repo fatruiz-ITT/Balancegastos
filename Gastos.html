@@ -17,52 +17,26 @@
             --text-dim: #64748b;
         }
         body { background-color: var(--bg-dark); color: #f8fafc; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
-        
         .sidebar-nav { height: 100vh; background: var(--panel-bg); border-right: 1px solid #1e293b; position: sticky; top: 0; overflow-y: auto; z-index: 100; }
-        .nav-item {
-            padding: 15px 25px; color: var(--text-dim); cursor: pointer; transition: 0.3s;
-            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; border-left: 4px solid transparent;
-        }
-        .nav-item:hover { background: rgba(255,255,255,0.02); color: #fff; }
-        .nav-item.active { 
-            background: linear-gradient(90deg, rgba(0, 242, 255, 0.08) 0%, transparent 100%);
-            border-left-color: var(--accent-cyan); color: var(--accent-cyan); font-weight: 700;
-        }
-
+        .nav-item { padding: 15px 25px; color: var(--text-dim); cursor: pointer; transition: 0.3s; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; border-left: 4px solid transparent; }
+        .nav-item.active { background: linear-gradient(90deg, rgba(0, 242, 255, 0.08) 0%, transparent 100%); border-left-color: var(--accent-cyan); color: var(--accent-cyan); font-weight: 700; }
         .status-card { background: var(--panel-bg); border: 1px solid #1e293b; border-radius: 16px; padding: 20px; height: 100%; }
-        .risk { color: var(--risk); }
-        .ok { color: var(--ok); }
-        
         .progress-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; font-weight: 700; }
         .progress-container { background: #080a0f; border-radius: 50px; height: 8px; overflow: hidden; border: 1px solid #1e293b; }
         .progress-fill { height: 100%; transition: width 0.5s ease; }
         .fill-tasks { background: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan); }
         .fill-money { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
-
         .paid { text-decoration: line-through; opacity: 0.35; }
-        .input-price {
-            background: transparent; border: 1px solid #334155; color: #fff;
-            border-radius: 6px; padding: 2px 8px; width: 85px; text-align: right; font-family: 'JetBrains Mono';
-        }
-        .input-price:focus { border-color: var(--accent-cyan); outline: none; background: rgba(0, 242, 255, 0.05); }
-
+        .input-price, .input-bank { background: transparent; border: 1px solid #334155; color: #fff; border-radius: 6px; padding: 2px 8px; font-family: 'JetBrains Mono'; font-size: 0.8rem; }
+        .input-price { width: 85px; text-align: right; }
+        .input-bank { width: 90px; color: var(--accent-cyan); border-color: rgba(0, 242, 255, 0.2); }
         .accordion-item { background: transparent; border: 1px solid #1e293b; margin-bottom: 8px; border-radius: 12px !important; overflow: hidden; }
         .accordion-button { background: transparent !important; color: #fff !important; box-shadow: none !important; }
         .accordion-button::after { filter: invert(1); }
-        
-        .form-check-input { cursor: pointer; background-color: #1e293b; border-color: #334155; }
-        .form-check-input:checked { background-color: var(--ok); border-color: var(--ok); }
-
-        .btn-update {
-            background: var(--accent-cyan); color: #000; font-weight: 800; border-radius: 8px;
-            padding: 12px 24px; border: none; transition: 0.3s;
-        }
-        .btn-update:hover { transform: translateY(-2px); filter: brightness(1.1); }
-
-        @media (max-width: 768px) { 
-            .sidebar-nav { height: auto; flex-direction: row; display: flex; overflow-x: auto; position: relative; }
-            .nav-item { white-space: nowrap; padding: 10px 15px; }
-        }
+        .btn-update { background: var(--accent-cyan); color: #000; font-weight: 800; border-radius: 8px; padding: 12px 24px; border: none; transition: 0.3s; }
+        .form-check-input:checked.chk-op { background-color: var(--accent-cyan); border-color: var(--accent-cyan); }
+        .form-check-input:checked.chk-pay { background-color: var(--ok); border-color: var(--ok); }
+        @media (max-width: 768px) { .sidebar-nav { height: auto; flex-direction: row; display: flex; overflow-x: auto; position: relative; } }
     </style>
 </head>
 <body>
@@ -72,7 +46,7 @@
         <div class="col-md-2 sidebar-nav">
             <div class="p-4 border-bottom border-dark text-center d-none d-md-block">
                 <div class="h5 mb-0 fw-bold">RUÍZ<span style="color:var(--accent-cyan)">.OS</span></div>
-                <small class="text-dim">v7.2 Stable</small>
+                <small class="text-dim">v7.3 Enhanced</small>
             </div>
             <div id="month-list"></div>
         </div>
@@ -83,78 +57,51 @@
                     <h1 class="fw-bold mb-3" id="title-mes">---</h1>
                     <div class="row g-4">
                         <div class="col-md-5">
-                            <div class="progress-label">Checklist de Operaciones</div>
+                            <div class="progress-label">Item Apartado en la cuenta</div>
                             <div class="progress-container"><div class="progress-fill fill-tasks" id="prog-t"></div></div>
                             <div class="ok small fw-bold mt-1" id="prog-t-text">0%</div>
                         </div>
                         <div class="col-md-5">
-                            <div class="progress-label">Flujo de Capital Pagado</div>
+                            <div class="progress-label">Item Pagado / Liquidado</div>
                             <div class="progress-container"><div class="progress-fill fill-money" id="prog-m"></div></div>
                             <div class="ok small fw-bold mt-1" id="prog-m-text">0%</div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-5 text-md-end mt-4 mt-md-0">
-                    <button class="btn-update" onclick="save()">SINC_SYSTEM_DATA</button>
-                </div>
+                <div class="col-md-5 text-md-end mt-4"><button class="btn-update" onclick="save()">SINC_SYSTEM_DATA</button></div>
             </div>
 
             <div class="row mb-5">
                 <div class="col-md-4 mb-3">
                     <div class="status-card" style="border-left: 4px solid var(--accent-cyan)">
                         <div class="progress-label">Q1: Para Despensa</div>
-                        <div class="h2 fw-bold ok" id="kpi-q1-libre">$0</div>
-                        <div class="d-flex justify-content-between mt-2 border-top border-dark pt-2">
-                            <small class="text-dim">Egresos Q1:</small>
-                            <small class="risk fw-bold" id="kpi-q1-gastos">$0</small>
-                        </div>
+                        <div class="h2 fw-bold" id="kpi-q1-libre" style="color: var(--ok)">$0</div>
+                        <div class="d-flex justify-content-between border-top border-dark pt-2"><small class="text-dim">Egresos Q1:</small><small class="text-danger fw-bold" id="kpi-q1-gastos">$0</small></div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="status-card" style="border-left: 4px solid #ffc107">
                         <div class="progress-label">Q2: Para Despensa</div>
-                        <div class="h2 fw-bold ok" id="kpi-q2-libre">$0</div>
-                        <div class="d-flex justify-content-between mt-2 border-top border-dark pt-2">
-                            <small class="text-dim">Egresos Q2:</small>
-                            <small class="risk fw-bold" id="kpi-q2-gastos">$0</small>
-                        </div>
+                        <div class="h2 fw-bold" id="kpi-q2-libre" style="color: var(--ok)">$0</div>
+                        <div class="d-flex justify-content-between border-top border-dark pt-2"><small class="text-dim">Egresos Q2:</small><small class="text-danger fw-bold" id="kpi-q2-gastos">$0</small></div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="status-card" style="border-color: var(--accent-cyan); background: rgba(0, 242, 255, 0.03);">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <div class="progress-label" style="color: var(--accent-cyan)">Fondo Total Acumulado</div>
-                                <div class="h2 fw-bold mb-0" id="kpi-ahorro-global">$0</div>
-                            </div>
-                            <div class="text-end">
-                                <div class="progress-label">Retiro <span id="mes-label-retiro">...</span></div>
-                                <input type="number" id="gasto-ahorro" class="input-price" 
-                                       style="width: 90px; color: var(--risk); border-color: rgba(255, 77, 77, 0.3);" 
-                                       placeholder="$ 0" onchange="updateRetiroMes(this.value)">
-                            </div>
-                        </div>
-                        <div class="mt-2 pt-2 border-top border-dark d-flex justify-content-between">
-                            <small class="text-dim">Ahorro real este mes:</small>
-                            <small class="ok fw-bold" id="kpi-ahorro-mes">$0</small>
-                        </div>
+                        <div class="progress-label" style="color: var(--accent-cyan)">Fondo Total Acumulado</div>
+                        <div class="h2 fw-bold mb-0" id="kpi-ahorro-global">$0</div>
+                        <div class="mt-2 pt-2 border-top border-dark d-flex justify-content-between"><small class="text-dim">Retiro <span id="mes-label-retiro">...</span></small><input type="number" id="gasto-ahorro" class="input-price" onchange="updateRetiroMes(this.value)"></div>
                     </div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-4">
-                    <div class="p-3 mb-3 border-start border-info border-4 bg-dark">
-                        <h6 class="fw-bold mb-0">QUINCENA ALPHA</h6>
-                        <small class="text-dim" id="date-q1"></small>
-                    </div>
+                    <div class="p-3 mb-3 border-start border-info border-4 bg-dark"><h6 class="fw-bold mb-0">QUINCENA ALPHA</h6><small class="text-dim" id="date-q1"></small></div>
                     <div class="accordion" id="accQ1"></div>
                 </div>
                 <div class="col-md-6 mb-4">
-                    <div class="p-3 mb-3 border-start border-warning border-4 bg-dark">
-                        <h6 class="fw-bold mb-0">QUINCENA OMEGA</h6>
-                        <small class="text-dim" id="date-q2"></small>
-                    </div>
+                    <div class="p-3 mb-3 border-start border-warning border-4 bg-dark"><h6 class="fw-bold mb-0">QUINCENA OMEGA</h6><small class="text-dim" id="date-q2"></small></div>
                     <div class="accordion" id="accQ2"></div>
                 </div>
             </div>
@@ -164,45 +111,48 @@
 
 <script>
 const calendarioNomina = {
-    "Abril": { q1: "01 Abr", q2: "17 Abr" },
-    "Mayo": { q1: "30 Abr", q2: "15 May" },
-    "Junio": { q1: "29 May", q2: "12 Jun" },
-    "Julio": { q1: "26 Jun", q2: "10 Jul" },
-    "Agosto": { q1: "24 Jul", q2: "07 Ago" },
-    "Septiembre": { q1: "21 Ago", q2: "04 Sep" },
-    "Octubre": { q1: "18 Sep", q2: "01 Oct" },
-    "Noviembre": { q1: "16 Oct", q2: "30 Oct" },
-    "Diciembre": { q1: "13 Nov", q2: "25 Nov" }
+    "Abril": { q1: "01 Abr", q2: "17 Abr" }, "Mayo": { q1: "30 Abr", q2: "15 May" }, "Junio": { q1: "29 May", q2: "12 Jun" },
+    "Julio": { q1: "26 Jun", q2: "10 Jul" }, "Agosto": { q1: "24 Jul", q2: "07 Ago" }, "Septiembre": { q1: "21 Ago", q2: "04 Sep" },
+    "Octubre": { q1: "18 Sep", q2: "01 Oct" }, "Noviembre": { q1: "16 Oct", q2: "30 Oct" }, "Diciembre": { q1: "13 Nov", q2: "25 Nov" }
 };
 
 let mesActual = "Abril";
-let appData = JSON.parse(localStorage.getItem('finanzas_v7_2')) || {};
+let appData = JSON.parse(localStorage.getItem('finanzas_v7_3')) || {};
 
 const plantillaMaestra = {
     q1: [
-        { id: "q1r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, p: false}, {n: "Luz", v: 500, p: false}] },
-        { id: "q1s", cat: "💊 Salud", icon: "fa-kit-medical", items: [{n: "Tiras azúcar", v: 350, p: false}, {n: "Metformina", v: 50, p: false}, {n: "Colitis", v: 200, p: false}, {n: "Medicina Extra", v: 250, p: false}] },
-        { id: "q1v", cat: "🔧 Servicios", icon: "fa-server", items: [{n: "Saldo Mamá Semana1", v: 100, p: false}, {n: "Saldo Mamá Semana2", v: 100, p: false}, {n: "Saldo Mamá Semana3", v: 100, p: false}, {n: "Revolut Premium", v: 180, p: false}] },
-        { id: "q1e", cat: "🎬 Ocio", icon: "fa-play", items: [{n: "Netflix", v: 249, p: false}, {n: "YouTube", v: 159, p: false}, {n: "Crunchyroll", v: 159, p: false}, {n: "Disney", v: 249, p: false}, {n: "WPS Office", v: 125, p: false}, {n: "Google One", v: 39, p: false}] },
-        { id: "q1p", cat: "🐾 Patas", icon: "fa-paw", items: [{n: "Arena Gato", v: 500, p: false}, {n: "Sobres Patas", v: 1000, p: false}] },
-        { id: "q1a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, p: false},{n: "Bitcoin Compra", v: 1000, p: false}] }
+        { id: "q1r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false, b: ""}, {n: "Luz", v: 500, op: false, p: false, b: ""}] },
+        { id: "q1s", cat: "💊 Salud", icon: "fa-kit-medical", items: [{n: "Tiras azúcar", v: 350, op: false, p: false, b: ""}, {n: "Metformina", v: 50, op: false, p: false, b: ""}, {n: "Colitis", v: 200, op: false, p: false, b: ""}, {n: "Medicina Extra", v: 250, op: false, p: false, b: ""}] },
+        { id: "q1v", cat: "🔧 Servicios", icon: "fa-server", items: [{n: "Saldo Mamá S1", v: 100, op: false, p: false, b: ""}, {n: "Saldo Mamá S2", v: 100, op: false, p: false, b: ""}, {n: "Saldo Mamá S3", v: 100, op: false, p: false, b: ""}, {n: "Revolut Premium", v: 180, op: false, p: false, b: ""}] },
+        { id: "q1e", cat: "🎬 Ocio", icon: "fa-play", items: [{n: "Netflix", v: 249, op: false, p: false, b: ""}, {n: "YouTube", v: 159, op: false, p: false, b: ""}, {n: "Crunchyroll", v: 159, op: false, p: false, b: ""}, {n: "Disney", v: 249, op: false, p: false, b: ""}, {n: "WPS Office", v: 125, op: false, p: false, b: ""}, {n: "Google One", v: 39, op: false, p: false, b: ""}] },
+        { id: "q1p", cat: "🐾 Patas", icon: "fa-paw", items: [{n: "Arena Gato", v: 500, op: false, p: false, b: ""}, {n: "Sobres Patas", v: 1000, op: false, p: false, b: ""}] },
+        { id: "q1a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, op: false, p: false, b: ""},{n: "Bitcoin Compra", v: 1000, op: false, p: false, b: ""}] }
     ],
     q2: [
-        { id: "q2r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, p: false}, {n: "Luz", v: 500, p: false}] },
-        { id: "q2m", cat: "💊 Salud Familiar", icon: "fa-heart-pulse", items: [
-            {n: "Tiras azúcar", v: 350, p: false}, {n: "Metformina", v: 50, p: false}, {n: "Medicina Extra", v: 200, p: false},
-            {n: "↳ Omega 3", v: 298, p: false}, {n: "↳ NAD + Resveratrol", v: 498, p: false}, {n: "↳ Magnesio", v: 298, p: false},
-            {n: "↳ Cetrum Multivitaminico", v: 303, p: false}, {n: "↳ Cardio Mariano + NAC", v: 298, p: false}, {n: "↳ Betabel Complex", v: 237, p: false}
-        ]},
-        { id: "q2v", cat: "🔧 Conectividad", icon: "fa-wifi", items: [{n: "Telnor", v: 349, p: false}, {n: "Izzy", v: 330, p: false}, {n: "At&t Plan", v: 629, p: false}, {n: "Uber Seguro", v: 600, p: false}, {n: "Agua", v: 250, p: false}, {n: "Gas", v: 200, p: false}, {n: "Saldo Mamá S4", v: 100, p: false}] },
-        { id: "q2e", cat: "🎬 Entretenimiento", icon: "fa-music", items: [{n: "Amazon Prime", v: 150, p: false}, {n: "Spotify", v: 139, p: false}] },
-        { id: "q2p", cat: "🐾 Patas", icon: "fa-cat", items: [{n: "Croquetas", v: 400, p: false}, {n: "Sobres Patas", v: 1050, p: false}] },
-        { id: "q2l", cat: "🧹 Limpieza", icon: "fa-broom", items: [{n: "Surtido Limpieza", v: 1200, p: false}] },
-        { id: "q2a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, p: false}] }
+        { id: "q2r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false, b: ""}, {n: "Luz", v: 500, op: false, p: false, b: ""}] },
+        { 
+    id: "q2m", 
+    cat: "💊 Salud Familiar", 
+    icon: "fa-heart-pulse", 
+    items: [
+        {n: "Tiras azúcar", v: 350, op: false, p: false, b: ""}, 
+        {n: "Metformina", v: 50, op: false, p: false, b: ""}, 
+        {n: "Medicina Extra", v: 200, op: false, p: false, b: ""},
+        {n: "↳ Omega 3", v: 298, op: false, p: false, b: ""}, 
+        {n: "↳ NAD + Resveratrol", v: 498, op: false, p: false, b: ""}, 
+        {n: "↳ Magnesio", v: 298, op: false, p: false, b: ""},
+        {n: "↳ Cetrum Multivitaminico", v: 303, op: false, p: false, b: ""}, 
+        {n: "↳ Cardio Mariano + NAC", v: 298, op: false, p: false, b: ""}, 
+        {n: "↳ Betabel Complex", v: 237, op: false, p: false, b: ""}
+    ] 
+},
+        { id: "q2v", cat: "🔧 Conectividad", icon: "fa-wifi", items: [{n: "Telnor", v: 349, op: false, p: false, b: ""}, {n: "Izzy", v: 330, op: false, p: false, b: ""}, {n: "At&t Plan", v: 629, op: false, p: false, b: ""}, {n: "Uber Seguro", v: 600, op: false, p: false, b: ""}, {n: "Agua", v: 250, op: false, p: false, b: ""}, {n: "Gas", v: 200, op: false, p: false, b: ""}, {n: "Saldo Mamá S4", v: 100, op: false, p: false, b: ""}] },
+        { id: "q2e", cat: "🎬 Entretenimiento", icon: "fa-music", items: [{n: "Amazon Prime", v: 150, op: false, p: false, b: ""}, {n: "Spotify", v: 139, op: false, p: false, b: ""}] },
+        { id: "q2p", cat: "🐾 Patas", icon: "fa-cat", items: [{n: "Croquetas", v: 400, op: false, p: false, b: ""}, {n: "Sobres Patas", v: 1050, op: false, p: false, b: ""}] },
+        { id: "q2l", cat: "🧹 Limpieza", icon: "fa-broom", items: [{n: "Surtido Limpieza", v: 1200, op: false, p: false, b: ""}] },
+        { id: "q2a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, op: false, p: false, b: ""}] }
     ],
-    pagoQuincenal: 15000,
-    bonos: 3200,
-    retiroAhorro: 0
+    ingreso: 15000, bonos: 3200, retiroAhorro: 0
 };
 
 function init() {
@@ -212,32 +162,28 @@ function init() {
         const div = document.createElement('div');
         div.className = `nav-item ${m === mesActual ? 'active' : ''}`;
         div.innerHTML = m.toUpperCase();
-        div.onclick = () => { 
-            mesActual = m; 
-            document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); 
-            div.classList.add('active'); 
-            render(); 
-        };
+        div.onclick = () => { mesActual = m; init(); };
         list.appendChild(div);
         if (!appData[m]) appData[m] = JSON.parse(JSON.stringify(plantillaMaestra));
     });
     render();
 }
 
+// --- FUNCIONES CORREGIDAS ---
+
 function render() {
     document.getElementById('title-mes').innerText = mesActual.toUpperCase();
     const data = appData[mesActual];
     const fechas = calendarioNomina[mesActual];
-
-    document.getElementById('date-q1').innerText = `PAGO ESTIMADO: ${fechas.q1}`;
-    document.getElementById('date-q2').innerText = `PAGO ESTIMADO: ${fechas.q2}`;
+    document.getElementById('date-q1').innerText = `PAGO: ${fechas.q1}`;
+    document.getElementById('date-q2').innerText = `PAGO: ${fechas.q2}`;
 
     ['q1', 'q2'].forEach(q => {
         const container = document.getElementById(q === 'q1' ? 'accQ1' : 'accQ2');
         container.innerHTML = '';
         data[q].forEach((sec, sIdx) => {
             let totalSec = sec.items.reduce((a, b) => a + b.v, 0);
-            const accordionHtml = `
+            container.innerHTML += `
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#c-${sec.id}">
@@ -248,112 +194,95 @@ function render() {
                         </button>
                     </h2>
                     <div id="c-${sec.id}" class="accordion-collapse collapse">
-                        <div class="accordion-body p-0 pt-2">
-                            <table class="table table-dark table-borderless mb-0">
-                                ${sec.items.map((it, iIdx) => {
-                                    const isSub = it.n.includes("↳");
-                                    const rowId = `row-${q}-${sIdx}-${iIdx}`;
-                                    return `
-                                    <tr id="${rowId}" class="${it.p ? 'paid' : ''}">
-                                        <td width="40" class="ps-4">
-                                            <input type="checkbox" class="form-check-input" ${it.p?'checked':''} 
-                                                onclick="quickToggle('${q}', ${sIdx}, ${iIdx}, '${rowId}')">
-                                        </td>
-                                        <td class="py-2 ${isSub ? 'ps-5 opacity-75 small' : ''}">${it.n}</td>
-                                        <td class="text-end pe-4">
-                                            <input type="number" class="input-price" value="${it.v}" 
-                                                onchange="updateVal('${q}', ${sIdx}, ${iIdx}, this.value)">
-                                        </td>
-                                    </tr>`;
-                                }).join('')}
+                        <div class="table-responsive">
+                            <table class="table table-dark table-borderless mb-0" style="font-size: 0.75rem;">
+                                <thead><tr class="text-dim">
+                                    <th class="ps-4">Apartado.</th><th>Pagado</th><th>Concepto</th><th>Cuenta</th><th class="text-end pe-4">Monto</th>
+                                </tr></thead>
+                                <tbody>
+                                ${sec.items.map((it, iIdx) => `
+                                <tr id="row-${q}-${sIdx}-${iIdx}" class="${it.p ? 'paid' : ''}">
+                                    <td class="ps-4"><input type="checkbox" class="form-check-input chk-op" ${it.op?'checked':''} onclick="toggle(event, '${q}',${sIdx},${iIdx},'op')"></td>
+                                    <td><input type="checkbox" class="form-check-input chk-pay" ${it.p?'checked':''} onclick="toggle(event, '${q}',${sIdx},${iIdx},'p')"></td>
+                                    <td class="py-2">${it.n}</td>
+                                    <td><input type="text" class="input-bank" value="${it.b || ''}" placeholder="Banco" onclick="event.stopPropagation()" onchange="updateVal('${q}',${sIdx},${iIdx},'b',this.value)"></td>
+                                    <td class="text-end pe-4"><input type="number" class="input-price" value="${it.v}" onclick="event.stopPropagation()" onchange="updateVal('${q}',${sIdx},${iIdx},'v',this.value)"></td>
+                                </tr>`).join('')}
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>`;
-            container.innerHTML += accordionHtml;
         });
     });
     updateTopStats();
 }
 
-function updateVal(q, sIdx, iIdx, v) {
-    appData[mesActual][q][sIdx].items[iIdx].v = parseFloat(v) || 0;
+function toggle(event, q, sIdx, iIdx, type) {
+    // CRITICAL: Detiene que el clic suba al botón del acordeón
+    event.stopPropagation(); 
+    
+    const item = appData[mesActual][q][sIdx].items[iIdx];
+    item[type] = !item[type];
+    
+    // Actualizamos la fila visualmente sin renderizar todo el acordeón
+    const row = document.getElementById(`row-${q}-${sIdx}-${iIdx}`);
+    if (item.p) row.classList.add('paid'); else row.classList.remove('paid');
+    
     updateTopStats();
 }
 
-function quickToggle(q, sIdx, iIdx, rowId) {
-    const item = appData[mesActual][q][sIdx].items[iIdx];
-    item.p = !item.p;
-    const row = document.getElementById(rowId);
-    if (item.p) row.classList.add('paid');
-    else row.classList.remove('paid');
+// También agregamos stopPropagation a los inputs por si acaso
+function updateVal(q, sIdx, iIdx, key, val) {
+    appData[mesActual][q][sIdx].items[iIdx][key] = (key === 'v') ? parseFloat(val) || 0 : val;
     updateTopStats();
 }
 
 function updateTopStats() {
-    let globalAhorro = 0;
-    let mesAhorroCheck = 0;
-    let q1Gasto = 0, q2Gasto = 0;
-    let qPagadoMes = 0, qTotalMesGasto = 0;
-    let itemsTotalMes = 0, itemsCheckMes = 0;
+    const data = appData[mesActual];
+    let q1Gasto = 0, q2Gasto = 0, pagadoTotal = 0, gastoTotalMes = 0;
+    let itemsTotal = 0, opsTotal = 0;
 
-    Object.keys(appData).forEach(m => {
-        let ahorroMesLoop = 0;
-        let retiroMesLoop = appData[m].retiroAhorro || 0;
-        
-        ['q1', 'q2'].forEach(q => {
-            appData[m][q].forEach(sec => {
-                sec.items.forEach(it => {
-                    if (it.p && sec.cat.includes("Ahorro")) ahorroMesLoop += it.v;
-                    if (m === mesActual) {
-                        itemsTotalMes++;
-                        if (q === 'q1') q1Gasto += it.v; else q2Gasto += it.v;
-                        if (it.p) { itemsCheckMes++; qPagadoMes += it.v; }
-                    }
-                });
-            });
-        });
-        globalAhorro += (ahorroMesLoop - retiroMesLoop);
-        if (m === mesActual) mesAhorroCheck = ahorroMesLoop;
+    ['q1', 'q2'].forEach(q => {
+        data[q].forEach(s => s.items.forEach(it => {
+            itemsTotal++;
+            if (q === 'q1') q1Gasto += it.v; else q2Gasto += it.v;
+            if (it.op) opsTotal++;
+            if (it.p) pagadoTotal += it.v;
+        }));
     });
 
-    const dataActual = appData[mesActual];
-    qTotalMesGasto = q1Gasto + q2Gasto;
+    gastoTotalMes = q1Gasto + q2Gasto;
+    const tieneBonos = mesActual === "Mayo" || data.q2.some(s => s.cat.includes("Limpieza"));
+    const ingresoQ2 = data.ingreso + (tieneBonos ? data.bonos : 0);
 
-    document.getElementById('mes-label-retiro').innerText = mesActual;
-    document.getElementById('gasto-ahorro').value = dataActual.retiroAhorro || "";
-    document.getElementById('kpi-ahorro-global').innerText = `$${globalAhorro.toLocaleString()}`;
-    document.getElementById('kpi-ahorro-mes').innerText = `$${mesAhorroCheck.toLocaleString()}`;
-
-    const tieneBonos = mesActual === "Mayo" || dataActual.q2.some(s => s.cat.includes("Limpieza"));
-    const ingresoQ2 = dataActual.pagoQuincenal + (tieneBonos ? dataActual.bonos : 0);
-
-    // Actualización de KPIs Quincenales
-    document.getElementById('kpi-q1-libre').innerText = `$${(dataActual.pagoQuincenal - q1Gasto).toLocaleString()}`;
+    document.getElementById('kpi-q1-libre').innerText = `$${(data.ingreso - q1Gasto).toLocaleString()}`;
     document.getElementById('kpi-q1-gastos').innerText = `$${q1Gasto.toLocaleString()}`;
-    
     document.getElementById('kpi-q2-libre').innerText = `$${(ingresoQ2 - q2Gasto).toLocaleString()}`;
     document.getElementById('kpi-q2-gastos').innerText = `$${q2Gasto.toLocaleString()}`;
 
-    // Barras de Progreso
-    let pT = Math.round((itemsCheckMes / itemsTotalMes) * 100) || 0;
-    document.getElementById('prog-t').style.width = pT + '%';
-    document.getElementById('prog-t-text').innerText = `${pT}% (${itemsCheckMes}/${itemsTotalMes})`;
+    // Ahorro Global
+    let global = 0;
+    Object.keys(appData).forEach(m => {
+        let ah = 0;
+        ['q1','q2'].forEach(q => appData[m][q].forEach(s => s.items.forEach(it => { if(it.p && s.cat.includes("Ahorro")) ah += it.v; })));
+        global += (ah - (appData[m].retiroAhorro || 0));
+    });
+    document.getElementById('kpi-ahorro-global').innerText = `$${global.toLocaleString()}`;
+    document.getElementById('mes-label-retiro').innerText = mesActual;
 
-    let pM = Math.round((qPagadoMes / qTotalMesGasto) * 100) || 0;
-    document.getElementById('prog-m').style.width = pM + '%';
-    document.getElementById('prog-m-text').innerText = `${pM}% ($${qPagadoMes.toLocaleString()})`;
+    // Progress
+    let pOps = Math.round((opsTotal / itemsTotal) * 100) || 0;
+    document.getElementById('prog-t').style.width = pOps + '%';
+    document.getElementById('prog-t-text').innerText = `${pOps}% (${opsTotal}/${itemsTotal})`;
+
+    let pPay = Math.round((pagadoTotal / gastoTotalMes) * 100) || 0;
+    document.getElementById('prog-m').style.width = pPay + '%';
+    document.getElementById('prog-m-text').innerText = `${pPay}% ($${pagadoTotal.toLocaleString()})`;
 }
 
-function updateRetiroMes(valor) {
-    appData[mesActual].retiroAhorro = parseFloat(valor) || 0;
-    updateTopStats();
-}
-
-function save() {
-    localStorage.setItem('finanzas_v7_2', JSON.stringify(appData));
-    alert("KERNEL: Sincronización local exitosa.");
-}
+function updateRetiroMes(v) { appData[mesActual].retiroAhorro = parseFloat(v) || 0; updateTopStats(); }
+function save() { localStorage.setItem('finanzas_v7_3', JSON.stringify(appData)); alert("Sincronización de Items y Cuentas Exitosa."); }
 
 init();
 </script>
