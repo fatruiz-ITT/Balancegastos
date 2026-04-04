@@ -122,17 +122,17 @@ let appData = JSON.parse(localStorage.getItem('finanzas_v7_3')) || {};
 const plantillaMaestra = {
     q1: [
         { id: "q1r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false, b: ""}, {n: "Luz", v: 500, op: false, p: false, b: ""}] },
-        { id: "q1s", cat: "💊 Salud", icon: "fa-kit-medical", items: [{n: "Tiras azúcar", v: 350, op: false, p: false, b: ""}, {n: "Metformina", v: 50, op: false, p: false, b: ""}, {n: "Colitis", v: 200, op: false, p: false, b: ""}, {n: "Medicina Extra", v: 250, op: false, p: false, b: ""}] },
+        { id: "q1s", cat: "💊 Salud Familiar", icon: "fa-kit-medical", items: [{n: "Tiras azúcar", v: 350, op: false, p: false, b: ""}, {n: "Metformina", v: 50, op: false, p: false, b: ""}, {n: "Colitis", v: 200, op: false, p: false, b: ""}, {n: "Medicina Extra", v: 250, op: false, p: false, b: ""}] },
         { id: "q1v", cat: "🔧 Servicios", icon: "fa-server", items: [{n: "Saldo Mamá S1", v: 100, op: false, p: false, b: ""}, {n: "Saldo Mamá S2", v: 100, op: false, p: false, b: ""}, {n: "Saldo Mamá S3", v: 100, op: false, p: false, b: ""}, {n: "Revolut Premium", v: 180, op: false, p: false, b: ""}] },
-        { id: "q1e", cat: "🎬 Ocio", icon: "fa-play", items: [{n: "Netflix", v: 249, op: false, p: false, b: ""}, {n: "YouTube", v: 159, op: false, p: false, b: ""}, {n: "Crunchyroll", v: 159, op: false, p: false, b: ""}, {n: "Disney", v: 249, op: false, p: false, b: ""}, {n: "WPS Office", v: 125, op: false, p: false, b: ""}, {n: "Google One", v: 39, op: false, p: false, b: ""}] },
-        { id: "q1p", cat: "🐾 Patas", icon: "fa-paw", items: [{n: "Arena Gato", v: 500, op: false, p: false, b: ""}, {n: "Sobres Patas", v: 1000, op: false, p: false, b: ""}] },
+        { id: "q1e", cat: "🎬 Suscripciones", icon: "fa-play", items: [{n: "Netflix", v: 249, op: false, p: false, b: ""}, {n: "YouTube", v: 159, op: false, p: false, b: ""}, {n: "Crunchyroll", v: 159, op: false, p: false, b: ""}, {n: "Disney", v: 249, op: false, p: false, b: ""}, {n: "WPS Office", v: 125, op: false, p: false, b: ""}, {n: "Google One", v: 39, op: false, p: false, b: ""}] },
+        { id: "q1p", cat: "🐾 Patas", icon: "fa-cat", items: [{n: "Arena Gato", v: 500, op: false, p: false, b: ""}, {n: "Sobres Patas", v: 1000, op: false, p: false, b: ""}] },
         { id: "q1a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, op: false, p: false, b: ""},{n: "Bitcoin Compra", v: 1000, op: false, p: false, b: ""}] }
     ],
     q2: [
         { id: "q2r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false, b: ""}, {n: "Luz", v: 500, op: false, p: false, b: ""}] },
         { 
     id: "q2m", 
-    cat: "💊 Salud Familiar", 
+    cat: "💊 Salud Mama", 
     icon: "fa-heart-pulse", 
     items: [
         {n: "Tiras azúcar", v: 350, op: false, p: false, b: ""}, 
@@ -146,8 +146,8 @@ const plantillaMaestra = {
         {n: "↳ Betabel Complex", v: 237, op: false, p: false, b: ""}
     ] 
 },
-        { id: "q2v", cat: "🔧 Conectividad", icon: "fa-wifi", items: [{n: "Telnor", v: 349, op: false, p: false, b: ""}, {n: "Izzy", v: 330, op: false, p: false, b: ""}, {n: "At&t Plan", v: 629, op: false, p: false, b: ""}, {n: "Uber Seguro", v: 600, op: false, p: false, b: ""}, {n: "Agua", v: 250, op: false, p: false, b: ""}, {n: "Gas", v: 200, op: false, p: false, b: ""}, {n: "Saldo Mamá S4", v: 100, op: false, p: false, b: ""}] },
-        { id: "q2e", cat: "🎬 Entretenimiento", icon: "fa-music", items: [{n: "Amazon Prime", v: 150, op: false, p: false, b: ""}, {n: "Spotify", v: 139, op: false, p: false, b: ""}] },
+        { id: "q2v", cat: "🔧 Servicios", icon: "fa-wifi", items: [{n: "Telnor", v: 349, op: false, p: false, b: ""}, {n: "Izzy", v: 330, op: false, p: false, b: ""}, {n: "At&t Plan", v: 629, op: false, p: false, b: ""}, {n: "Uber Seguro", v: 600, op: false, p: false, b: ""}, {n: "Agua", v: 250, op: false, p: false, b: ""}, {n: "Gas", v: 200, op: false, p: false, b: ""}, {n: "Saldo Mamá S4", v: 100, op: false, p: false, b: ""}] },
+        { id: "q2e", cat: "🎬 Suscripciones", icon: "fa-music", items: [{n: "Amazon Prime", v: 150, op: false, p: false, b: ""}, {n: "Spotify", v: 139, op: false, p: false, b: ""}] },
         { id: "q2p", cat: "🐾 Patas", icon: "fa-cat", items: [{n: "Croquetas", v: 400, op: false, p: false, b: ""}, {n: "Sobres Patas", v: 1050, op: false, p: false, b: ""}] },
         { id: "q2l", cat: "🧹 Limpieza", icon: "fa-broom", items: [{n: "Surtido Limpieza", v: 1200, op: false, p: false, b: ""}] },
         { id: "q2a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, op: false, p: false, b: ""}] }
