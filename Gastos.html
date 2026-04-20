@@ -40,113 +40,28 @@
         .accordion-button { background: transparent !important; color: #fff !important; padding: 12px 15px; box-shadow: none !important; }
         .accordion-button::after { filter: invert(1); }
 
-        /* Estilo Recíproco */
         .reciproco-row { background: rgba(0, 242, 255, 0.02) !important; }
         .reciproco-text { padding-left: 1.5rem !important; color: var(--text-dim) !important; font-size: 0.7rem !important; }
 
         @media (max-width: 768px) {
-            .sidebar-nav { display: none; }
-            .mobile-header { display: block; background: var(--panel-bg); padding: 15px; border-bottom: 1px solid #1e293b; position: sticky; top:0; z-index: 1000; }
-            .month-selector-mobile { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 5px; scrollbar-width: none; }
-            .m-pill { padding: 6px 15px; border-radius: 20px; border: 1px solid #1e293b; font-size: 0.7rem; white-space: nowrap; color: var(--text-dim); }
-            .m-pill.active { background: var(--accent-cyan); color: #000; font-weight: 800; border-color: var(--accent-cyan); }
-        }
-        .mobile-header { display: none; }
-        
-        /* MOBILE HEADER FIX */
-        .mobile-header { 
-            display: none; 
-        }
-
-        @media (max-width: 768px) {
             .sidebar-nav { display: none !important; }
-            
-            .mobile-header { 
-                display: block !important; 
-                background: var(--panel-bg); 
-                padding: 15px; 
-                border-bottom: 1px solid #1e293b; 
-                position: sticky; 
-                top: 0; 
-                z-index: 2000; /* Asegura que esté por encima de todo */
-            }
-
-            .month-selector-mobile { 
-                display: flex; 
-                flex-wrap: nowrap;
-                overflow-x: auto; 
-                gap: 10px; 
-                padding: 10px 0; 
-                -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
-            }
-
-            /* Ocultar barra de scroll pero permitir scroll */
+            .mobile-header { display: block !important; background: var(--panel-bg); padding: 15px; border-bottom: 1px solid #1e293b; position: sticky; top: 0; z-index: 2000; }
+            .month-selector-mobile { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 10px; padding: 10px 0; -webkit-overflow-scrolling: touch; }
             .month-selector-mobile::-webkit-scrollbar { display: none; }
-            .month-selector-mobile { -ms-overflow-style: none; scrollbar-width: none; }
-
-            .m-pill { 
-                padding: 8px 18px; 
-                border-radius: 20px; 
-                border: 1px solid #1e293b; 
-                font-size: 0.7rem; 
-                white-space: nowrap; 
-                color: var(--text-dim);
-                background: rgba(255,255,255,0.02);
-            }
-
-            .m-pill.active { 
-                background: var(--accent-cyan); 
-                color: #000; 
-                font-weight: 800; 
-                border-color: var(--accent-cyan);
-                box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
-            }
+            .m-pill { padding: 8px 18px; border-radius: 20px; border: 1px solid #1e293b; font-size: 0.7rem; white-space: nowrap; color: var(--text-dim); background: rgba(255,255,255,0.02); }
+            .m-pill.active { background: var(--accent-cyan); color: #000; font-weight: 800; border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(0, 242, 255, 0.3); }
         }
-        /* Botón IA Flotante */
-.ai-fab {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
-    background: var(--accent-cyan);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #000;
-    box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
-    cursor: pointer;
-    z-index: 3000;
-    transition: 0.3s;
-}
-.ai-fab:hover { transform: scale(1.1) rotate(15deg); }
-
-/* Terminal de Diagnóstico */
-.ai-terminal {
-    position: fixed;
-    bottom: 100px;
-    right: 30px;
-    width: 350px;
-    max-height: 400px;
-    background: #0f172a;
-    border: 1px solid var(--accent-cyan);
-    border-radius: 12px;
-    display: none; /* Se activa con JS */
-    flex-direction: column;
-    z-index: 3000;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-}
-.ai-header { background: rgba(0,242,255,0.1); padding: 10px; font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--accent-cyan); border-bottom: 1px solid rgba(0,242,255,0.2); }
-.ai-body { padding: 15px; font-size: 0.8rem; overflow-y: auto; color: #e2e8f0; }
-.ai-sugerencia { background: rgba(255,255,255,0.03); border-left: 2px solid var(--ok); padding: 8px; margin-bottom: 10px; border-radius: 4px; }
+        .ai-fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--accent-cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #000; box-shadow: 0 0 20px rgba(0, 242, 255, 0.4); cursor: pointer; z-index: 3000; transition: 0.3s; }
+        .ai-fab:hover { transform: scale(1.1) rotate(15deg); }
+        .ai-terminal { position: fixed; bottom: 100px; right: 30px; width: 350px; max-height: 400px; background: #0f172a; border: 1px solid var(--accent-cyan); border-radius: 12px; display: none; flex-direction: column; z-index: 3000; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .ai-header { background: rgba(0,242,255,0.1); padding: 10px; font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--accent-cyan); border-bottom: 1px solid rgba(0,242,255,0.2); }
+        .ai-body { padding: 15px; font-size: 0.8rem; overflow-y: auto; color: #e2e8f0; }
+        .ai-sugerencia { background: rgba(255,255,255,0.03); border-left: 2px solid var(--ok); padding: 8px; margin-bottom: 10px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
 <div class="ai-fab" onclick="toggleAI()"><i class="fa-solid fa-microchip"></i></div>
-
 <div class="ai-terminal" id="aiTerminal">
     <div class="ai-header d-flex justify-content-between">
         <span>RUIZ_OS_INTELLIGENCE_v1.0</span>
@@ -158,7 +73,7 @@
     </div>
 </div>
 
-<div class="mobile-header">
+<div class="mobile-header" style="display:none;">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="fw-bold">RUÍZ<span style="color:var(--accent-cyan)">.OS</span></div>
         <button class="btn btn-sm btn-info fw-bold" onclick="save()">SINC_DATA</button>
@@ -199,41 +114,10 @@
             </div>
 
             <div class="row mb-4 g-2">
-    <div class="col-6 col-md-4">
-        <div class="status-card" style="border-left: 3px solid var(--accent-cyan)">
-            <div class="progress-label">Q1 Despensa: Disponible</div>
-            <div class="h2 fw-bold mb-0" id="kpi-q1-libre" style="color: var(--ok)">$0</div>
-            <div class="d-flex justify-content-between border-top border-dark mt-1 pt-1">
-                <small class="text-dim">Gastos:</small>
-                <small class="text-danger fw-bold" id="kpi-q1-gastos">$0</small>
+                <div class="col-6 col-md-4"><div class="status-card" style="border-left: 3px solid var(--accent-cyan)"><div class="progress-label">Q1 Despensa: Disponible</div><div class="h2 fw-bold mb-0" id="kpi-q1-libre" style="color: var(--ok)">$0</div><div class="d-flex justify-content-between border-top border-dark mt-1 pt-1"><small class="text-dim">Gastos:</small><small class="text-danger fw-bold" id="kpi-q1-gastos">$0</small></div></div></div>
+                <div class="col-6 col-md-4"><div class="status-card" style="border-left: 3px solid #ffc107"><div class="progress-label">Q2 Despensa: Disponible</div><div class="h2 fw-bold mb-0" id="kpi-q2-libre" style="color: var(--ok)">$0</div><div class="d-flex justify-content-between border-top border-dark mt-1 pt-1"><small class="text-dim">Gastos:</small><small class="text-danger fw-bold" id="kpi-q2-gastos">$0</small></div></div></div>
+                <div class="col-12 col-md-4"><div class="status-card" style="border-left: 3px solid var(--ok)"><div class="progress-label">Fondo Total Acumulado</div><div class="h2 fw-bold mb-0" id="kpi-ahorro-global" style="color: #fff">$0</div><div class="d-flex justify-content-between border-top border-dark mt-1 pt-1 align-items-center"><small class="text-dim">Retiro Mes:</small><input type="number" id="gasto-ahorro" class="input-price" style="width: 70px; height: 20px; font-size: 0.65rem;" onchange="updateRetiroMes(this.value)" placeholder="0"></div></div></div>
             </div>
-        </div>
-    </div>
-    
-    <div class="col-6 col-md-4">
-        <div class="status-card" style="border-left: 3px solid #ffc107">
-            <div class="progress-label">Q2 Despensa: Disponible</div>
-            <div class="h2 fw-bold mb-0" id="kpi-q2-libre" style="color: var(--ok)">$0</div>
-            <div class="d-flex justify-content-between border-top border-dark mt-1 pt-1">
-                <small class="text-dim">Gastos:</small>
-                <small class="text-danger fw-bold" id="kpi-q2-gastos">$0</small>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-md-4">
-        <div class="status-card" style="border-left: 3px solid var(--ok)">
-            <div class="progress-label">Fondo Total Acumulado</div>
-            <div class="h2 fw-bold mb-0" id="kpi-ahorro-global" style="color: #fff">$0</div>
-            <div class="d-flex justify-content-between border-top border-dark mt-1 pt-1 align-items-center">
-                <small class="text-dim">Retiro Mes:</small>
-                <input type="number" id="gasto-ahorro" class="input-price" 
-                       style="width: 70px; height: 20px; font-size: 0.65rem;" 
-                       onchange="updateRetiroMes(this.value)" placeholder="0">
-            </div>
-        </div>
-    </div>
-</div>
 
             <div class="row">
                 <div class="col-md-6 mb-4">
@@ -261,14 +145,23 @@ let appData = JSON.parse(localStorage.getItem('finanzas_v8_3')) || {};
 
 const plantillaMaestra = {
     q1: [
-        { id: "q1r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false, b: ""}, {n: "Luz", v: 600, op: false, p: false, b: ""}] },
-        { id: "q1s", cat: "💊 Salud Familiar", icon: "fa-kit-medical", items: [{n: "Tiras azúcar", v: 350, op: false, p: false, b: ""}, {n: "Metformina", v: 50, op: false, p: false, b: ""}, {n: "Colitis", v: 200, op: false, p: false, b: ""}, {n: "Medicina Extra", v: 250, op: false, p: false, b: ""}] },
-        { id: "q1v", cat: "🔧 Servicios", icon: "fa-server", items: [{n: "Saldo Semana-1", v: 100, op: false, p: false, b: ""}, {n: "Saldo Semana-2", v: 100, op: false, p: false, b: ""}, {n: "Saldo Semana-3", v: 100, op: false, p: false, b: ""}, {n: "Revolut Premium", v: 180, op: false, p: false, b: ""}] },
-        { id: "q1e", cat: "🎬 Ocio", icon: "fa-play", items: [{n: "Netflix", v: 249, op: false, p: false, b: ""}, {n: "YouTube", v: 159, op: false, p: false, b: ""}, {n: "Crunchyroll", v: 159, op: false, p: false, b: ""}, {n: "Disney", v: 249, op: false, p: false, b: ""}, {n: "WPS Office", v: 125, op: false, p: false, b: ""}, {n: "Google One", v: 39, op: false, p: false, b: ""}] },
-        { id: "q1p", cat: "🐾 Patas", icon: "fa-paw", items: [{n: "Arena Gato", v: 500, op: false, p: false, b: ""}, {n: "Sobres Patas", v: 1000, op: false, p: false, b: ""}] },
-        { id: "q1a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, op: false, p: false, b: ""}, {n: "Compra de BTC", v: 1000, op: false, p: false, b: ""}] }
+        { id: "q1r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false}, {n: "Luz", v: 600, op: false, p: false}] },
+        { id: "q1s", cat: "💊 Salud Familiar", icon: "fa-kit-medical", items: [{n: "Tiras azúcar", v: 350, op: false, p: false}, {n: "Metformina", v: 50, op: false, p: false}, {n: "Colitis", v: 200, op: false, p: false}, {n: "Medicina Extra", v: 250, op: false, p: false}] },
+        { id: "q1v", cat: "🔧 Servicios", icon: "fa-server", items: [{n: "Saldo Semana-1", v: 100, op: false, p: false}, {n: "Saldo Semana-2", v: 100, op: false, p: false}, {n: "Saldo Semana-3", v: 100, op: false, p: false}, {n: "Revolut Premium", v: 180, op: false, p: false}] },
+        { id: "q1e", cat: "🎬 Ocio", icon: "fa-play", items: [{n: "Netflix", v: 249, op: false, p: false}, {n: "YouTube", v: 159, op: false, p: false}, {n: "Crunchyroll", v: 159, op: false, p: false}, {n: "Disney", v: 249, op: false, p: false}, {n: "WPS Office", v: 125, op: false, p: false}, {n: "Google One", v: 39, op: false, p: false}] },
+        { id: "q1p", cat: "🐾 Patas", icon: "fa-paw", items: [{n: "Arena Gato", v: 500, op: false, p: false}, {n: "Sobres Patas", v: 1000, op: false, p: false}] },
+        { id: "q1a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, op: false, p: false}, {n: "Compra de BTC", v: 1000, op: false, p: false}] }
     ],
-    q2: [ { id: "q2r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false, b: ""}, {n: "Luz", v: 600, op: false, p: false, b: ""}] }, { id: "q2m", cat: "💊 Salud Familiar", icon: "fa-heart-pulse", items: [ {n: "Tiras azúcar", v: 350, op: false, p: false, b: ""}, {n: "Metformina", v: 50, op: false, p: false, b: ""}, {n: "Medicina Extra", v: 200, op: false, p: false, b: ""}, {n: "↳ Omega 3", v: 298, op: false, p: false, b: ""}, {n: "↳ NAD + Resv", v: 498, op: false, p: false, b: ""}, {n: "↳ Magnesio", v: 298, op: false, p: false, b: ""}, {n: "↳ Centrum Multi", v: 303, op: false, p: false, b: ""}, {n: "↳ Cardo Mariano", v: 298, op: false, p: false, b: ""}, {n: "↳ Betabel Comp", v: 237, op: false, p: false, b: ""} ]}, { id: "q2v", cat: "🔧 Conectividad", icon: "fa-wifi", items: [{n: "Telnor", v: 349, op: false, p: false, b: ""}, {n: "Izzy", v: 330, op: false, p: false, b: ""}, {n: "At&t Plan", v: 650, op: false, p: false, b: ""}, {n: "Uber Seguro", v: 600, op: false, p: false, b: ""}, {n: "Agua", v: 300, op: false, p: false, b: ""}, {n: "Gas", v: 200, op: false, p: false, b: ""}, {n: "Saldo S4", v: 100, op: false, p: false, b: ""}] }, { id: "q2e", cat: "🎬 Ocio", icon: "fa-music", items: [{n: "Amazon Prime", v: 150, op: false, p: false, b: ""}, {n: "Spotify", v: 139, op: false, p: false, b: ""}] }, { id: "q2p", cat: "🐾 Patas", icon: "fa-cat", items: [{n: "Croquetas", v: 400, op: false, p: false, b: ""}, {n: "Sobres Patas", v: 1050, op: false, p: false, b: ""}] }, { id: "q2l", cat: "🧹 Limpieza", icon: "fa-broom", items: [{n: "Surtido Limpieza", v: 1200, op: false, p: false, b: ""}] }, { id: "q2a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, op: false, p: false, b: ""}] } ], ingreso: 15000, bonos: 3200, retiroAhorro: 0 
+    q2: [ 
+        { id: "q2r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false}, {n: "Luz", v: 600, op: false, p: false}] }, 
+        { id: "q2m", cat: "💊 Salud Familiar", icon: "fa-heart-pulse", items: [ {n: "Tiras azúcar", v: 350, op: false, p: false}, {n: "Metformina", v: 50, op: false, p: false}, {n: "Medicina Extra", v: 200, op: false, p: false}, {n: "↳ Omega 3", v: 298, op: false, p: false}, {n: "↳ NAD + Resv", v: 498, op: false, p: false}, {n: "↳ Magnesio", v: 298, op: false, p: false}, {n: "↳ Centrum Multi", v: 303, op: false, p: false}, {n: "↳ Cardo Mariano", v: 298, op: false, p: false}, {n: "↳ Betabel Comp", v: 237, op: false, p: false} ]}, 
+        { id: "q2v", cat: "🔧 Conectividad", icon: "fa-wifi", items: [{n: "Telnor", v: 349, op: false, p: false}, {n: "Izzy", v: 330, op: false, p: false}, {n: "At&t Plan", v: 650, op: false, p: false}, {n: "Uber Seguro", v: 600, op: false, p: false}, {n: "Agua", v: 300, op: false, p: false}, {n: "Gas", v: 200, op: false, p: false}, {n: "Saldo S4", v: 100, op: false, p: false}] }, 
+        { id: "q2e", cat: "🎬 Ocio", icon: "fa-music", items: [{n: "Amazon Prime", v: 150, op: false, p: false}, {n: "Spotify", v: 139, op: false, p: false}] }, 
+        { id: "q2p", cat: "🐾 Patas", icon: "fa-cat", items: [{n: "Croquetas", v: 400, op: false, p: false}, {n: "Sobres Patas", v: 1050, op: false, p: false}] }, 
+        { id: "q2l", cat: "🧹 Limpieza", icon: "fa-broom", items: [{n: "Surtido Limpieza", v: 1200, op: false, p: false}] }, 
+        { id: "q2a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, op: false, p: false}] } 
+    ], 
+    ingreso: 15000, bonos: 3200, retiroAhorro: 0 
 };
 
 function init() {
@@ -302,26 +195,22 @@ function render() {
         const container = document.getElementById(q === 'q1' ? 'accQ1' : 'accQ2');
         container.innerHTML = '';
         data[q].forEach((sec, sIdx) => {
-            let totalSec = sec.items.reduce((a, b) => a + b.v, 0);
+            // Calculamos solo lo pendiente (no pagado)
+            let totalPendiente = sec.items.reduce((acc, it) => !it.p ? acc + it.v : acc, 0);
             container.innerHTML += `
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#c-${sec.id}">
                             <div class="d-flex justify-content-between w-100 pe-3 align-items-center">
                                 <span><i class="fa-solid ${sec.icon} me-3 opacity-50"></i>${sec.cat}</span>
-                                <span class="badge bg-dark text-info border border-info border-opacity-25">$${totalSec.toLocaleString()}</span>
+                                <span class="badge bg-dark text-info border border-info border-opacity-25" id="badge-${sec.id}">$${totalPendiente.toLocaleString()}</span>
                             </div>
                         </button>
                     </h2>
                     <div id="c-${sec.id}" class="accordion-collapse collapse">
                         <div class="table-responsive">
                             <table class="table table-dark table-borderless mb-0" style="font-size: 0.75rem;">
-                                <thead><tr class="text-dim">
-                                    <th class="ps-4">Apartado</th>
-                                    <th>Concepto</th>
-                                    <th class="text-center pe-4">Monto</th>
-                                    <th>Pagado</th>
-                                </tr></thead>
+                                <thead><tr class="text-dim"><th class="ps-4">Apartado</th><th>Concepto</th><th class="text-center pe-4">Monto</th><th>Pagado</th></tr></thead>
                                 <tbody>
                                 ${sec.items.map((it, iIdx) => {
                                     const isRec = it.n.includes('↳');
@@ -347,13 +236,27 @@ function toggle(event, q, sIdx, iIdx, type) {
     event.stopPropagation();
     const item = appData[mesActual][q][sIdx].items[iIdx];
     item[type] = !item[type];
-    const row = document.getElementById(`row-${q}-${sIdx}-${iIdx}`);
-    if (item.p) row.classList.add('paid'); else row.classList.remove('paid');
+    
+    // Si marcamos Pagado, actualizamos estilo
+    if (type === 'p') {
+        const row = document.getElementById(`row-${q}-${sIdx}-${iIdx}`);
+        if (item.p) row.classList.add('paid'); else row.classList.remove('paid');
+        
+        // RECALCULAR TOTAL PENDIENTE DE LA SECCIÓN Y ACTUALIZAR BADGE EN VIVO
+        const sec = appData[mesActual][q][sIdx];
+        const nuevoTotal = sec.items.reduce((acc, it) => !it.p ? acc + it.v : acc, 0);
+        document.getElementById(`badge-${sec.id}`).innerText = `$${nuevoTotal.toLocaleString()}`;
+    }
+    
     updateTopStats();
 }
 
 function updateVal(q, sIdx, iIdx, key, val) {
     appData[mesActual][q][sIdx].items[iIdx][key] = (key === 'v') ? parseFloat(val) || 0 : val;
+    // Actualizar badge al cambiar precio manual
+    const sec = appData[mesActual][q][sIdx];
+    const nuevoTotal = sec.items.reduce((acc, it) => !it.p ? acc + it.v : acc, 0);
+    document.getElementById(`badge-${sec.id}`).innerText = `$${nuevoTotal.toLocaleString()}`;
     updateTopStats();
 }
 
@@ -366,11 +269,10 @@ function updateTopStats() {
             if (it.op) oT++; if (it.p) pT += it.v;
         }));
     });
-    const tieneB = mesActual === "Mayo" || data.q2.some(s => s.cat.includes("Limpieza"));
-    const iQ2 = data.ingreso + (tieneB ? data.bonos : 0);
+    
     document.getElementById('kpi-q1-libre').innerText = `$${(data.ingreso - q1G).toLocaleString()}`;
     document.getElementById('kpi-q1-gastos').innerText = `$${q1G.toLocaleString()}`;
-    document.getElementById('kpi-q2-libre').innerText = `$${(iQ2 - q2G).toLocaleString()}`;
+    document.getElementById('kpi-q2-libre').innerText = `$${((data.ingreso + (mesActual === "Mayo" ? data.bonos : 0)) - q2G).toLocaleString()}`;
     document.getElementById('kpi-q2-gastos').innerText = `$${q2G.toLocaleString()}`;
     
     let global = 0;
@@ -392,41 +294,21 @@ function updateTopStats() {
 function updateRetiroMes(v) { appData[mesActual].retiroAhorro = parseFloat(v) || 0; updateTopStats(); }
 function save() { localStorage.setItem('finanzas_v8_3', JSON.stringify(appData)); alert("SYSTEM_SYNC: OK."); }
 init();
-function toggleAI() {
-    const term = document.getElementById('aiTerminal');
-    term.style.display = (term.style.display === 'flex') ? 'none' : 'flex';
-}
-
+function toggleAI() { const term = document.getElementById('aiTerminal'); term.style.display = (term.style.display === 'flex') ? 'none' : 'flex'; }
 function generarPrediccion() {
     const data = appData[mesActual];
     const aiBody = document.getElementById('aiBody');
-    
-    // Cálculo de Salud Financiera
     let totalEgresos = 0;
     data.q1.forEach(s => s.items.forEach(i => totalEgresos += i.v));
     data.q2.forEach(s => s.items.forEach(i => totalEgresos += i.v));
-    
-    const ratioAhorro = (2000 / (data.ingreso * 2)) * 100; // Basado en tus 1000 por Q
-
+    const ratioAhorro = (2000 / (data.ingreso * 2)) * 100;
     aiBody.innerHTML = `
-        <div class="ai-sugerencia">
-            <b class="text-info">💡 PREDICCIÓN DE FLUJO:</b><br>
-            Si mantienes el gasto de $${totalEgresos.toLocaleString()}, tu capacidad de ahorro real es del ${ratioAhorro.toFixed(1)}%.
-        </div>
-        <div class="ai-sugerencia" style="border-color: #ffc107">
-            <b class="text-warning">⚠️ ALERTA DE SUSCRIPCIONES:</b><br>
-            Detecto 6 servicios digitales. Si omites "WPS Office" o "Crunchyroll" este mes, podrías subir tu fondo de emergencia un 5%.
-        </div>
+        <div class="ai-sugerencia"><b class="text-info">💡 PREDICCIÓN DE FLUJO:</b><br>Si mantienes el gasto de $${totalEgresos.toLocaleString()}, tu capacidad de ahorro real es del ${ratioAhorro.toFixed(1)}%.</div>
+        <div class="ai-sugerencia" style="border-color: #ffc107"><b class="text-warning">⚠️ ALERTA DE SUSCRIPCIONES:</b><br>Detecto servicios digitales. Omitir alguno sube tu fondo un 5%.</div>
         <button class="btn btn-info btn-sm w-100" onclick="copyDataForIA()">COPIAR DATA PARA CHATBOT</button>
-        <small class="text-dim mt-2 d-block">Copia la data y pégala en nuestro chat para un análisis profundo.</small>
     `;
 }
-
-function copyDataForIA() {
-    const dataString = JSON.stringify(appData[mesActual]);
-    navigator.clipboard.writeText("Analiza mi presupuesto de RuizOs: " + dataString);
-    alert("¡Datos listos! Pégalos en el chat con tu IA para recibir consejos personalizados.");
-}
+function copyDataForIA() { const dataString = JSON.stringify(appData[mesActual]); navigator.clipboard.writeText("Analiza mi presupuesto de RuizOs: " + dataString); alert("¡Datos listos!"); }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
