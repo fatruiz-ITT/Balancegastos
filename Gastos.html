@@ -145,21 +145,21 @@ let appData = JSON.parse(localStorage.getItem('finanzas_v8_3')) || {};
 
 const plantillaMaestra = {
     q1: [
-        { id: "q1r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false}, {n: "Luz", v: 600, op: false, p: false}] },
+        { id: "q1r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false}, {n: "Luz", v: 500, op: false, p: false}] },
         { id: "q1s", cat: "💊 Salud Familiar", icon: "fa-kit-medical", items: [{n: "Tiras azúcar", v: 350, op: false, p: false}, {n: "Metformina", v: 50, op: false, p: false}, {n: "Colitis", v: 200, op: false, p: false}, {n: "Medicina Extra", v: 250, op: false, p: false}] },
         { id: "q1v", cat: "🔧 Servicios", icon: "fa-server", items: [{n: "Saldo Semana-1", v: 100, op: false, p: false}, {n: "Saldo Semana-2", v: 100, op: false, p: false}, {n: "Saldo Semana-3", v: 100, op: false, p: false}, {n: "Revolut Premium", v: 180, op: false, p: false}] },
         { id: "q1e", cat: "🎬 Ocio", icon: "fa-play", items: [{n: "Netflix", v: 249, op: false, p: false}, {n: "YouTube", v: 159, op: false, p: false}, {n: "Crunchyroll", v: 159, op: false, p: false}, {n: "Disney", v: 249, op: false, p: false}, {n: "WPS Office", v: 125, op: false, p: false}, {n: "Google One", v: 39, op: false, p: false}] },
         { id: "q1p", cat: "🐾 Patas", icon: "fa-paw", items: [{n: "Arena Gato", v: 500, op: false, p: false}, {n: "Sobres Patas", v: 1000, op: false, p: false}] },
-        { id: "q1a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, op: false, p: false}, {n: "Compra de BTC", v: 1000, op: false, p: false}] }
+        { id: "q1a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal En Revolut ", v: 1000, op: false, p: false}, {n: "Ahorro en Cetes", v: 1000, op: false, p: false}] }
     ],
     q2: [ 
-        { id: "q2r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false}, {n: "Luz", v: 600, op: false, p: false}] }, 
+        { id: "q2r", cat: "🏠 Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false}, {n: "Luz", v: 500, op: false, p: false}] }, 
         { id: "q2m", cat: "💊 Salud Familiar", icon: "fa-heart-pulse", items: [ {n: "Tiras azúcar", v: 350, op: false, p: false}, {n: "Metformina", v: 50, op: false, p: false}, {n: "Medicina Extra", v: 200, op: false, p: false}, {n: "↳ Omega 3", v: 298, op: false, p: false}, {n: "↳ NAD + Resv", v: 498, op: false, p: false}, {n: "↳ Magnesio", v: 298, op: false, p: false}, {n: "↳ Centrum Multi", v: 303, op: false, p: false}, {n: "↳ Cardo Mariano", v: 298, op: false, p: false}, {n: "↳ Betabel Comp", v: 237, op: false, p: false} ]}, 
-        { id: "q2v", cat: "🔧 Conectividad", icon: "fa-wifi", items: [{n: "Telnor", v: 349, op: false, p: false}, {n: "Izzy", v: 330, op: false, p: false}, {n: "At&t Plan", v: 650, op: false, p: false}, {n: "Uber Seguro", v: 600, op: false, p: false}, {n: "Agua", v: 300, op: false, p: false}, {n: "Gas", v: 200, op: false, p: false}, {n: "Saldo S4", v: 100, op: false, p: false}] }, 
+        { id: "q2v", cat: "🔧 Servicios", icon: "fa-wifi", items: [{n: "Telnor", v: 349, op: false, p: false}, {n: "Izzy", v: 330, op: false, p: false}, {n: "At&t Plan", v: 650, op: false, p: false}, {n: "Uber Seguro", v: 600, op: false, p: false}, {n: "Agua", v: 300, op: false, p: false}, {n: "Gas", v: 200, op: false, p: false}, {n: "Saldo S4", v: 100, op: false, p: false}] }, 
         { id: "q2e", cat: "🎬 Ocio", icon: "fa-music", items: [{n: "Amazon Prime", v: 150, op: false, p: false}, {n: "Spotify", v: 139, op: false, p: false}] }, 
         { id: "q2p", cat: "🐾 Patas", icon: "fa-cat", items: [{n: "Croquetas", v: 400, op: false, p: false}, {n: "Sobres Patas", v: 1050, op: false, p: false}] }, 
         { id: "q2l", cat: "🧹 Limpieza", icon: "fa-broom", items: [{n: "Surtido Limpieza", v: 1200, op: false, p: false}] }, 
-        { id: "q2a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal", v: 1000, op: false, p: false}] } 
+        { id: "q2a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: [{n: "Compra de BTC", v: 1000, op: false, p: false}] } 
     ], 
     ingreso: 15000, bonos: 3200, retiroAhorro: 0 
 };
@@ -313,3 +313,4 @@ function copyDataForIA() { const dataString = JSON.stringify(appData[mesActual])
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+ 
