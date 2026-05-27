@@ -3,12 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0a0c12">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3061/3061320.png">
-    <title>RuizOs Gastos 2026</title>
+    <title>RuizOs Gastos 2026 - Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -19,12 +14,14 @@
             --accent-cyan: #00f2ff;
             --ok: #00ff9c;
             --text-dim: #64748b;
+            --credit: #ff4757;
+            --purple: #a855f7;
         }
         body { background-color: var(--bg-dark); color: #f8fafc; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
         .sidebar-nav { height: 100vh; background: var(--panel-bg); border-right: 1px solid #1e293b; position: sticky; top: 0; z-index: 100; }
         .nav-item { padding: 15px 25px; color: var(--text-dim); cursor: pointer; transition: 0.3s; font-family: 'JetBrains Mono'; font-size: 0.75rem; border-left: 4px solid transparent; }
         .nav-item.active { background: linear-gradient(90deg, rgba(0, 242, 255, 0.08) 0%, transparent 100%); border-left-color: var(--accent-cyan); color: var(--accent-cyan); font-weight: 700; }
-        .status-card { background: var(--panel-bg); border: 1px solid #1e293b; border-radius: 16px; padding: 15px; height: 100%; }
+        .status-card { background: var(--panel-bg); border: 1px solid #1e293b; border-radius: 16px; padding: 18px 15px; height: 100%; display: flex; flex-direction: column; justify-content: center; }
         .progress-label { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
         .progress-container { background: #080a0f; border-radius: 50px; height: 6px; overflow: hidden; border: 1px solid #1e293b; margin: 8px 0; }
         .progress-fill { height: 100%; transition: width 0.5s ease; }
@@ -35,36 +32,27 @@
         .accordion-item { background: transparent; border: 1px solid #1e293b; margin-bottom: 8px; border-radius: 12px !important; overflow: hidden; }
         .accordion-button { background: transparent !important; color: #fff !important; padding: 12px 15px; box-shadow: none !important; }
         .accordion-button::after { filter: invert(1); }
-        .reciproco-row { background: rgba(0, 242, 255, 0.02) !important; }
-        .reciproco-text { padding-left: 1.5rem !important; color: var(--text-dim) !important; font-size: 0.7rem !important; }
+        
+        .interactive-panel { background: linear-gradient(135deg, #12151f 0%, #080a0f 100%); border: 1px solid #1e293b; border-radius: 16px; padding: 20px; position: relative; }
+        .panel-select { background: #080a0f; border: 1px solid #334155; color: #fff; font-size: 0.75rem; border-radius: 6px; padding: 4px; }
+        .table-panel-historial { font-family: 'JetBrains Mono'; font-size: 0.7rem; color: #e2e8f0; table-layout: fixed; width: 100%; }
+        .table-panel-historial th { color: var(--text-dim); text-transform: uppercase; font-size: 0.6rem; }
+        .btn-delete-row { background: transparent; border: none; color: var(--credit); padding: 0 4px; cursor: pointer; opacity: 0.7; transition: 0.2s; }
+        .btn-delete-row:hover { opacity: 1; transform: scale(1.1); }
+        
+        .kpi-line { font-family: 'JetBrains Mono'; font-size: 0.8rem; display: flex; justify-content: space-between; padding: 3px 0; color: #e2e8f0; }
+        .kpi-line b { font-size: 0.85rem; }
+
         @media (max-width: 768px) {
             .sidebar-nav { display: none !important; }
             .mobile-header { display: block !important; background: var(--panel-bg); padding: 15px; border-bottom: 1px solid #1e293b; position: sticky; top: 0; z-index: 2000; }
-            .month-selector-mobile { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 10px; padding: 10px 0; -webkit-overflow-scrolling: touch; }
-            .month-selector-mobile::-webkit-scrollbar { display: none; }
+            .month-selector-mobile { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 10px; padding: 10px 0; }
             .m-pill { padding: 8px 18px; border-radius: 20px; border: 1px solid #1e293b; font-size: 0.7rem; white-space: nowrap; color: var(--text-dim); background: rgba(255,255,255,0.02); }
-            .m-pill.active { background: var(--accent-cyan); color: #000; font-weight: 800; border-color: var(--accent-cyan); box-shadow: 0 0 10px rgba(0, 242, 255, 0.3); }
+            .m-pill.active { background: var(--accent-cyan); color: #000; font-weight: 800; }
         }
-        .ai-fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--accent-cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #000; box-shadow: 0 0 20px rgba(0, 242, 255, 0.4); cursor: pointer; z-index: 3000; transition: 0.3s; }
-        .ai-fab:hover { transform: scale(1.1) rotate(15deg); }
-        .ai-terminal { position: fixed; bottom: 100px; right: 30px; width: 350px; max-height: 400px; background: #0f172a; border: 1px solid var(--accent-cyan); border-radius: 12px; display: none; flex-direction: column; z-index: 3000; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .ai-header { background: rgba(0,242,255,0.1); padding: 10px; font-family: 'JetBrains Mono'; font-size: 0.7rem; color: var(--accent-cyan); border-bottom: 1px solid rgba(0,242,255,0.2); }
-        .ai-body { padding: 15px; font-size: 0.8rem; overflow-y: auto; color: #e2e8f0; }
-        .ai-sugerencia { background: rgba(255,255,255,0.03); border-left: 2px solid var(--ok); padding: 8px; margin-bottom: 10px; border-radius: 4px; }
     </style>
 </head>
 <body>
-<div class="ai-fab" onclick="toggleAI()"><i class="fa-solid fa-microchip"></i></div>
-<div class="ai-terminal" id="aiTerminal">
-    <div class="ai-header d-flex justify-content-between">
-        <span>RUIZ_OS_INTELLIGENCE_v1.0</span>
-        <i class="fa-solid fa-xmark cursor-pointer" onclick="toggleAI()"></i>
-    </div>
-    <div class="ai-body" id="aiBody">
-        <p class="text-dim">Esperando análisis de datos...</p>
-        <button class="btn btn-outline-info btn-sm w-100 mt-3" onclick="generarPrediccion()">EJECUTAR DIAGNÓSTICO</button>
-    </div>
-</div>
 <div class="mobile-header" style="display:none;">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="fw-bold">RUÍZ<span style="color:var(--accent-cyan)">.OS</span></div>
@@ -77,7 +65,7 @@
         <div class="col-md-2 sidebar-nav text-center">
             <div class="p-4 border-bottom border-dark">
                 <div class="h5 mb-0 fw-bold">RUÍZ<span style="color:var(--accent-cyan)">.OS</span></div>
-                <small class="text-dim">v8.3 Pro</small>
+                <small class="text-dim">v11.0 Cumulative</small>
             </div>
             <div id="month-list-desktop"></div>
         </div>
@@ -102,36 +90,151 @@
                     <button class="btn btn-info fw-bold px-4" onclick="save()">SINC_SYSTEM_DATA</button>
                 </div>
             </div>
+            
             <div class="row mb-4 g-2">
-                <div class="col-6 col-md-3">
+                <div class="col-12 col-md-4">
                     <div class="status-card" style="border-left: 3px solid var(--accent-cyan)">
-                        <div class="progress-label">Q1 Despensa: Disponible</div>
-                        <div class="h2 fw-bold mb-0" id="kpi-q1-libre" style="color: var(--ok)">$0</div>
-                        <div class="d-flex justify-content-between border-top border-dark mt-1 pt-1"><small class="text-dim">Gastos:</small><small class="text-danger fw-bold" id="kpi-q1-gastos">$0</small></div>
+                        <div class="progress-label mb-2">Q1 Resumen</div>
+                        <div class="kpi-line">
+                            <span>Gastos Total:</span> <b id="lbl-q1-gastos" style="color: #fff">$0</b>
+                        </div>
+                        <div class="kpi-line" style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 5px;">
+                            <span>Libre Q1:</span> <b id="lbl-q1-libre" style="color: var(--ok)">$0</b>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
+                <div class="col-12 col-md-4">
                     <div class="status-card" style="border-left: 3px solid #ffc107">
-                        <div class="progress-label">Q2 Despensa: Disponible</div>
-                        <div class="h2 fw-bold mb-0" id="kpi-q2-libre" style="color: var(--ok)">$0</div>
-                        <div class="d-flex justify-content-between border-top border-dark mt-1 pt-1"><small class="text-dim">Gastos:</small><small class="text-danger fw-bold" id="kpi-q2-gastos">$0</small></div>
+                        <div class="progress-label mb-2">Q2 Resumen</div>
+                        <div class="kpi-line">
+                            <span>Gastos Total:</span> <b id="lbl-q2-gastos" style="color: #fff">$0</b>
+                        </div>
+                        <div class="kpi-line" style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 5px;">
+                            <span>Libre Q2:</span> <b id="lbl-q2-libre" style="color: var(--ok)">$0</b>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3">
-                    <div class="status-card" style="border-left: 3px solid var(--accent-cyan)">
-                        <div class="progress-label">Bonos Final del Mes</div>
-                        <div class="h2 fw-bold mb-0" id="kpi-bonos-monto" style="color: var(--ok)">$0</div>
-                        <div class="d-flex justify-content-between border-top border-dark mt-1 pt-1"><small class="text-dim">Gastos:</small><small class="text-danger fw-bold" id="bonos-gastos-limpieza">$0</small></div>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3">
-                    <div class="status-card" style="border-left: 3px solid var(--ok)">
-                        <div class="progress-label">Fondo Total Acumulado</div>
-                        <div class="h2 fw-bold mb-0" id="kpi-ahorro-global" style="color: #fff">$0</div>
-                        <div class="d-flex justify-content-between border-top border-dark mt-1 pt-1 align-items-center"><small class="text-dim">Retiro Mes:</small><input type="number" id="gasto-ahorro" class="input-price" style="width: 70px; height: 20px; font-size: 0.65rem;" onchange="updateRetiroMes(this.value)" placeholder="0"></div>
+                <div class="col-12 col-md-4">
+                    <div class="status-card" style="border-left: 3px solid var(--purple)">
+                        <div class="progress-label mb-2">Bonos (Neto)</div>
+                        <div class="h3 fw-bold mb-0" id="kpi-bonos-monto" style="color: var(--ok); font-family: 'JetBrains Mono'; margin-top:2px;">$0</div>
                     </div>
                 </div>
             </div>
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="interactive-panel" style="border-color: rgba(255, 71, 87, 0.3);">
+                        <div class="row g-3 align-items-start">
+                            <div class="col-md-3">
+                                <div class="progress-label text-white-50"><i class="fa-solid fa-credit-card me-2"></i>Crédito Disponible</div>
+                                <div class="h3 fw-bold mb-1" id="cc-limite-disponible" style="color: var(--ok)">$15,000</div>
+                                <div class="progress-label mt-2">Deuda Acumulada</div>
+                                <div class="h4 fw-bold mb-0" id="cc-saldo-final" style="color: var(--credit)">$0</div>
+                            </div>
+                            <div class="col-md-5 border-start border-secondary ps-md-4">
+                                <div class="progress-label mb-2 text-info"><i class="fa-solid fa-plus-minus me-1"></i> Transacción de Tarjeta</div>
+                                <div class="row g-2">
+                                    <div class="col-7">
+                                        <input type="text" id="cc-desc" class="input-price w-100 text-start" style="font-size: 0.8rem;" placeholder="¿Qué gastaste / Concepto?">
+                                    </div>
+                                    <div class="col-5">
+                                        <input type="number" id="cc-monto" class="input-price w-100" style="font-size: 0.8rem;" placeholder="Monto $">
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="date" id="cc-fecha" class="input-price w-100 text-start" style="font-size: 0.75rem; padding: 4px;">
+                                    </div>
+                                    <div class="col-5">
+                                        <select id="cc-destino" class="w-100 panel-select">
+                                            <option value="cc_gasto">Cargo Regular (+)</option>
+                                            <option value="abono">Abonar (-) a Tarjeta</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <button class="btn btn-sm btn-danger w-100 fw-bold" style="font-size: 0.7rem; height: 100%;" onclick="agregarTransaccionCC()">REGISTRAR</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 border-start border-secondary ps-md-4">
+                                <div class="progress-label mb-2 text-warning d-flex justify-content-between">
+                                    <span>Gastos con la Credit Card</span>
+                                    <a href="#" class="text-muted text-decoration-none" onclick="limpiarHistorialCC(event)" style="font-size:0.55rem;">Reset Total</a>
+                                </div>
+                                <div style="max-height: 125px; overflow-y: auto;">
+                                    <table class="table table-dark table-borderless mb-0 table-cc-historial">
+                                        <thead>
+                                            <tr class="border-bottom border-secondary">
+                                                <th style="width: 20%;">Fecha</th>
+                                                <th style="width: 45%;">Concepto</th>
+                                                <th style="width: 25%;" class="text-end">Monto</th>
+                                                <th style="width: 10%;" class="text-center"><i class="fa-solid fa-trash-can"></i></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="cc-historial-rows"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="interactive-panel" style="border-color: rgba(0, 255, 156, 0.3);">
+                        <div class="row g-3 align-items-start">
+                            <div class="col-md-3">
+                                <div class="progress-label text-white-50"><i class="fa-solid fa-piggy-bank me-2"></i>Ahorro Global Acumulado</div>
+                                <div class="h2 fw-bold mb-0 mt-1" id="ahorro-total-acumulado" style="color: var(--ok); font-family: 'JetBrains Mono';">$0</div>
+                                <small class="text-dim" style="font-size:0.6rem;">Incluye checkboxes marcados + bitácora</small>
+                            </div>
+                            <div class="col-md-5 border-start border-secondary ps-md-4">
+                                <div class="progress-label mb-2 text-success"><i class="fa-solid fa-money-bill-transfer me-1"></i> Ajustes / Movimientos Manuales</div>
+                                <div class="row g-2">
+                                    <div class="col-7">
+                                        <input type="text" id="ahorro-desc" class="input-price w-100 text-start" style="font-size: 0.8rem;" placeholder="Concepto (Ej. Retiro de emergencia, Extra)">
+                                    </div>
+                                    <div class="col-5">
+                                        <input type="number" id="ahorro-monto" class="input-price w-100" style="font-size: 0.8rem;" placeholder="Monto $">
+                                    </div>
+                                    <div class="col-4">
+                                        <input type="date" id="ahorro-fecha" class="input-price w-100 text-start" style="font-size: 0.75rem; padding: 4px;">
+                                    </div>
+                                    <div class="col-5">
+                                        <select id="ahorro-tipo" class="w-100 panel-select">
+                                            <option value="deposito">Inyección Extra (+)</option>
+                                            <option value="retiro">Retirar / Sacar Fondos (-)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <button class="btn btn-sm btn-success w-100 fw-bold" style="font-size: 0.7rem; height: 100%;" onclick="agregarTransaccionAhorro()">PROCESAR</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 border-start border-secondary ps-md-4">
+                                <div class="progress-label mb-2 text-info d-flex justify-content-between">
+                                    <span>Bitácora Manual de Ajustes</span>
+                                    <a href="#" class="text-muted text-decoration-none" onclick="limpiarHistorialAhorro(event)" style="font-size:0.55rem;">Reset Ajustes</a>
+                                </div>
+                                <div style="max-height: 125px; overflow-y: auto;">
+                                    <table class="table table-dark table-borderless mb-0 table-panel-historial">
+                                        <thead>
+                                            <tr class="border-bottom border-secondary">
+                                                <th style="width: 20%;">Fecha</th>
+                                                <th style="width: 45%;">Concepto</th>
+                                                <th style="width: 25%;" class="text-end">Monto</th>
+                                                <th style="width: 10%;" class="text-center"><i class="fa-solid fa-trash-can"></i></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ahorro-historial-rows"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <div class="p-3 mb-3 border-start border-info border-4 bg-dark"><h6 class="fw-bold mb-0">QUINCENA ALPHA</h6><small class="text-dim" id="date-q1"></small></div>
@@ -142,294 +245,451 @@
                     <div class="accordion" id="accQ2"></div>
                 </div>
             </div>
+            
+            <div class="sidebar-nav-container" id="seccion-limpieza-condicional" style="display:none;">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="p-3 mb-3 border-start border-success border-4 bg-dark d-flex justify-content-between align-items-center">
+                            <h6 class="fw-bold mb-0">BONOS Y LIMPIEZA MENSUAL</h6>
+                            <span class="badge bg-purple" id="limpieza-monto-kpi"></span>
+                        </div>
+                        <div class="accordion" id="accLimpieza"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <script>
 const calendarioNomina = {
+    "Enero": { q1: "01 Ene", q2: "15 Ene" }, "Febrero": { q1: "31 Ene", q2: "14 Feb" }, "Marzo": { q1: "28 Feb", q2: "14 Mar" },
     "Abril": { q1: "01 Abr", q2: "17 Abr" }, "Mayo": { q1: "30 Abr", q2: "15 May" }, "Junio": { q1: "29 May", q2: "12 Jun" },
     "Julio": { q1: "26 Jun", q2: "10 Jul" }, "Agosto": { q1: "24 Jul", q2: "07 Ago" }, "Septiembre": { q1: "21 Ago", q2: "04 Sep" },
     "Octubre": { q1: "18 Sep", q2: "01 Oct" }, "Noviembre": { q1: "16 Oct", q2: "30 Oct" }, "Diciembre": { q1: "13 Nov", q2: "25 Nov" }
 };
-let mesActual = "Abril";
-let appData = JSON.parse(localStorage.getItem('finanzas_v8_3')) || {};
+const nombreMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+function obtenerMesPorQuincenaActual() {
+    const hoy = new Date();
+    const añoActual = hoy.getFullYear();
+    let mesSeleccionado = nombreMeses[hoy.getMonth()]; 
+    let minDiferencia = Infinity;
+
+    for (const [mes, quincenas] of Object.entries(calendarioNomina)) {
+        const parsearFecha = (str) => {
+            const [dia, mesStr] = str.split(' ');
+            const mesesMap = { Ene:0, Feb:1, Mar:2, Abr:3, May:4, Jun:5, Jul:6, Ago:7, Sep:8, Oct:9, Nov:10, Dic:11 };
+            return new Date(añoActual, mesesMap[mesStr], parseInt(dia));
+        };
+        const fechaQ1 = parsearFecha(quincenas.q1);
+        const fechaQ2 = parsearFecha(quincenas.q2);
+
+        [fechaQ1, fechaQ2].forEach(fechaCobro => {
+            const diff = fechaCobro - hoy;
+            if (diff >= -259200000 && diff < minDiferencia) { 
+                minDiferencia = diff;
+                mesSeleccionado = mes;
+            }
+        });
+    }
+    return mesSeleccionado;
+}
+
+let mesActual = obtenerMesPorQuincenaActual();
+let appData = JSON.parse(localStorage.getItem('finanzas_v11_0')) || {};
+
 const plantillaMaestra = {
     q1: [
-        { id: "q1r", cat: "🏠 Vivienda", icon: "fa-house", items: 
-        [{n: "Renta Casa", v: 4000, op: false, p: false}, 
-        {n: "Luz", v: 400, op: false, p: false}] },
-        
-        { id: "q1s", cat: "💊 Salud Familiar", icon: "fa-kit-medical", items: 
-        [{n: "Tiras azúcar", v: 350, op: false, p: false}, 
-        {n: "Metformina", v: 50, op: false, p: false}, 
-        {n: "Colitis", v: 200, op: false, p: false}, 
-        {n: "Medicina Extra", v: 200, op: false, p: false}] },
-        
-        { id: "q1v", cat: "🔧 Servicios", icon: "fa-server", items: 
-        [{n: "Saldo Semana-1", v: 50, op: false, p: false}, 
-        {n: "Saldo Semana-2", v: 50, op: false, p: false}, 
-        {n: "Saldo Semana-3", v: 50, op: false, p: false}, 
-        {n: "Revolut Premium", v: 404.84, op: false, p: false}] },
-        
-        { id: "q1e", cat: "🎬 Ocio", icon: "fa-play", items: 
-        [{n: "Netflix", v: 249, op: false, p: false}, 
-        {n: "Crunchyroll", v: 159, op: false, p: false}, 
-        {n: "WPS Office", v: 125, op: false, p: false}, 
-        {n: "Google One", v: 39, op: false, p: false}] },
-        
-        { id: "q1p", cat: "🐾 Patas", icon: "fa-paw", items: 
-        [{n: "Sobres Fancy", v: 200, op: false, p: false}, 
-        {n: "Croquetas Wholeheartd", v: 450, op: false, p: false}, 
-        {n: "Churus 40 tubos", v: 300, op: false, p: false}, 
-        {n: "Veterinario Ahorro", v: 500, op: false, p: false}]},
-        
-        { id: "q1x", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: 
-        [{n: "Ahorro Personal En Revolut ", v: 1000, op: false, p: false}, 
-        {n: "Ahorro en Cetes", v: 1000, op: false, p: false}]},
-        
-        { id: "q1a", cat: "🏧 Retiro de Efectivo", icon: "fa-solid fa-money-check-dollar", items: 
-        [{n: "Garrofones de agua ", v: 300, op: false, p: false}, 
-        {n: "Efectivo Extra", v: 200, op: false, p: false}]}
+        { id: "q1v", cat: " Pagos de Servicios", icon: "fa-server", items: [{n: "Saldo Mama Semana-1", v: 50, op: false, p: false}, {n: "Saldo Mama Semana-2", v: 50, op: false, p: false}, {n: "Saldo Mama Semana-3", v: 50, op: false, p: false}, {n: "Revolut Premium", v: 404.84, op: false, p: false}] },
+        { id: "q1e", cat: " Suscripciones", icon: "fa-play", items: [{n: "Netflix", v: 249, op: false, p: false}, {n: "Crunchyroll", v: 159, op: false, p: false}, {n: "WPS Office", v: 125, op: false, p: false}, {n: "Google One", v: 39, op: false, p: false}] },
+        { id: "q1p", cat: " Patas Gastos", icon: "fa-paw", items: [{n: "Sobres Fancy", v: 200, op: false, p: false}, {n: "Croquetas Wholeheartd", v: 450, op: false, p: false}, {n: "Churus 40 tubos", v: 300, op: false, p: false}, {n: "Veterinario Ahorro", v: 500, op: false, p: false}]},
+        { id: "q1s", cat: " Salud Familiar", icon: "fa-kit-medical", items: [{n: "Tiras azúcar", v: 350, op: false, p: false}, {n: "Metformina", v: 50, op: false, p: false}, {n: "Colitis", v: 200, op: false, p: false}, {n: "Acido Alpha Lipoico", v: 1154, op: false, p: false}, {n: "Medicina Extra", v: 200, op: false, p: false}] },
+        { id: "q1r", cat: " Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false}, {n: "Luz", v: 400, op: false, p: false}] },
+        { id: "q1x", cat: " Ahorro Proyectado", icon: "fa-piggy-bank", items: [{n: "Ahorro Personal En Revolut ", v: 1000, op: false, p: false}, {n: "Ahorro en Cetes", v: 1000, op: false, p: false}]},
+        { id: "q1a", cat: " Retiro de Efectivo", icon: "fa-solid fa-money-check-dollar", items: [{n: "Garrofones de agua ", v: 300, op: false, p: false}, {n: "Efectivo Extra", v: 200, op: false, p: false}]}
     ],
-    q2: [ 
-        { id: "q2r", cat: "🏠 Vivienda", icon: "fa-house", items: 
-        [{n: "Renta Casa", v: 4000, op: false, p: false}, 
-        {n: "Luz", v: 400, op: false, p: false}] }, 
-        
-        { id: "q2m", cat: "💊 Salud Familiar", icon: "fa-heart-pulse", items: 
-        [{n: "Tiras azúcar", v: 350, op: false, p: false}, 
-        {n: "Metformina", v: 50, op: false, p: false}, 
-        {n: "Medicina Extra", v: 200, op: false, p: false}, 
-        {n: "↳ Omega 3", v: 350, op: false, p: false}, 
-        {n: "↳ Vitamina D", v: 200, op: false, p: false}, 
-        {n: "↳ Vitamina c", v: 291, op: false, p: false}, 
-        {n: "↳ Betabel Comp", v: 280, op: false, p: false} ]}, 
-        
-        { id: "q2v", cat: "🔧 Servicios", icon: "fa-wifi", items: 
-        [{n: "Telnor", v: 349, op: false, p: false}, {n: "Izzy", v: 330, op: false, p: false}, 
-        {n: "At&t Plan", v: 655, op: false, p: false}, 
-        {n: "Uber Seguro", v: 600, op: false, p: false}, 
-        {n: "Agua", v: 300, op: false, p: false}, 
-        {n: "Gas", v: 200, op: false, p: false}, 
-        {n: "Saldo S4", v: 50, op: false, p: false}] }, 
-        
-        { id: "q2e", cat: "🎬 Ocio", icon: "fa-music", items: 
-        [{n: "Amazon Prime", v: 150, op: false, p: false}, 
-        {n: "Spotify", v: 139, op: false, p: false}] }, 
-        
-        { id: "q2p", cat: "🐾 Patas", icon: "fa-cat", items: 
-        [{n: "Fancy Gourmet Latas", v: 930, op: false, p: false}, 
-        {n: "Arena", v: 550, op: false, p: false}]},
-        
-        { id: "q2l", cat: "🧹 Limpieza Mandado", icon: "fa-broom", items: 
-        [{n: "1 - Ajax Bicloro", v: 45, op: false, p: false }, 
-        {n: "2 - Ajax Amonia (blanco)", v: 90, op: false, p: false}, 
-        {n: "2 - Poett Rosa", v: 52, op: false, p: false}, 
-        {n: "4 - Great Value pastillas", v: 120, op: false, p: false}, 
-        {n: "1 - Cloro Mascotas", v: 32, op: false, p: false }, 
-        {n: "2 - Harpic Baño", v: 20, op: false, p: false }, 
-        {n: "1 - Axión 750ml", v: 40, op: false, p: false }, 
-        {n: "1 - Axión pasta", v: 80, op: false, p: false }, 
-        {n: "1 - Shampoo", v: 140, op: false, p: false }, 
-        {n: "1 - Enjuague", v: 140, op: false, p: false }, 
-        {n: "Paquete Jabón de Bañarse", v: 86, op: false, p: false }, 
-        {n: "4 - Servitoalla iris", v: 160, op: false, p: false }, 
-        {n: "4 - Papel higienico", v: 350, op: false, p: false }, 
-        {n: "Jabón de Lavar", v: 134, op: false, p: false }, 
-        {n: "Suavitel", v: 135, op: false, p: false}, 
-        {n: "Zote o vel rosita", v: 45, op: false, p: false},
-        {n: "5 - Bolsa bote cocina", v: 360, op: false, p: false}, 
-        {n: "10 - Bolsas bote baño", v: 340, op: false, p: false}] }, 
-        
-        { id: "q2a", cat: "💰 Ahorro", icon: "fa-piggy-bank", items: 
-        [{n: "Compra de BTC", v: 1000, op: false, p: false}] },
-        
-        { id: "q2x", cat: "🏧 Retiro de Efectivo", icon: "fa-solid fa-money-check-dollar", items: 
-        [{n: "Garrofones de agua ", v: 300, op: false, p: false}, 
-        {n: "Efectivo Extra", v: 200, op: false, p: false}]}
-    ], 
-    ingreso: 15000, bonos: 3200, retiroAhorro: 0 
+    q2: [
+        { id: "q2v", cat: "Pagos de Servicios", icon: "fa-wifi", items: [{n: "Telnor", v: 349, op: false, p: false}, {n: "Izzy", v: 330, op: false, p: false}, {n: "At&t Plan", v: 655, op: false, p: false}, {n: "Uber Seguro", v: 600, op: false, p: false}, {n: "Agua", v: 300, op: false, p: false}, {n: "Gas", v: 200, op: false, p: false}, {n: "Saldo Mama Semana-4", v: 50, op: false, p: false}] },
+        { id: "q2e", cat: " Suscripciones", icon: "fa-music", items: [{n: "Amazon Prime", v: 150, op: false, p: false}, {n: "Spotify", v: 139, op: false, p: false}] },
+        { id: "q2p", cat: " Patas", icon: "fa-cat", items: [{n: "Fancy Gourmet Latas", v: 930, op: false, p: false}, {n: "Arena", v: 550, op: false, p: false}]},
+        { id: "q2m", cat: " Salud Familiar", icon: "fa-heart-pulse", items: [{n: "Tiras azúcar", v: 350, op: false, p: false}, {n: "Metformina", v: 50, op: false, p: false}, {n: "Medicina Extra", v: 200, op: false, p: false}, {n: "↳ Omega 3", v: 350, op: false, p: false}, {n: "↳ Vitamina B12", v: 600, op: false, p: false}, {n: "↳ Vitamina C", v: 105, op: false, p: false} ]},
+        { id: "q2r", cat: " Vivienda", icon: "fa-house", items: [{n: "Renta Casa", v: 4000, op: false, p: false}, {n: "Luz", v: 400, op: false, p: false}] },
+        { id: "q2a", cat: " Ahorro Proyectado", icon: "fa-piggy-bank", items: [{n: "Compra de BTC", v: 1000, op: false, p: false}] },
+        { id: "q2x", cat: " Retiro de Efectivo", icon: "fa-solid fa-money-check-dollar", items: [{n: "Garrofones de agua ", v: 300, op: false, p: false}, {n: "Efectivo Extra", v: 200, op: false, p: false}]}
+    ],
+    limpieza: [
+        { id: "q2l", cat: " Limpieza Mandado", icon: "fa-broom", items: [
+        {n: "1 - Ajax Bicloro", v: 45, op: false, p: false }, {n: "2 - Ajax Amonia (blanco)", v: 90, op: false, p: false},
+        {n: "2 - Poett Rosa", v: 52, op: false, p: false}, {n: "4 - Great Value pastillas", v: 120, op: false, p: false},
+        {n: "1 - Cloro Mascotas", v: 32, op: false, p: false }, {n: "2 - Harpic Baño", v: 20, op: false, p: false },
+        {n: "1 - Axión 750ml", v: 40, op: false, p: false }, {n: "1 - Axión pasta", v: 80, op: false, p: false },
+        {n: "1 - Shampoo", v: 140, op: false, p: false }, {n: "1 - Enjuague", v: 140, op: false, p: false },
+        {n: "Paquete Jabón de Bañarse", v: 86, op: false, p: false }, {n: "4 - Servitoalla iris", v: 160, op: false, p: false },
+        {n: "2 - Papel higienico", v: 400, op: false, p: false }, {n: "Jabón de Lavar", v: 134, op: false, p: false },
+        {n: "Suavitel", v: 135, op: false, p: false}, {n: "Zote o vel rosita", v: 45, op: false, p: false}, {n: "3 toallas sanitarias", v: 300, op: false, p: false}] }
+    ],
+    ingreso: 16500, bonos: 3400, ccDeuda: 0, ccHistorial: [], ahorroHistorial: []
 };
+
+function save() { 
+    localStorage.setItem('finanzas_v11_0', JSON.stringify(appData)); 
+}
+
+/* LÓGICA DE CRÉDITO */
+function agregarTransaccionCC() {
+    const descInput = document.getElementById('cc-desc');
+    const montoInput = document.getElementById('cc-monto');
+    const fechaInput = document.getElementById('cc-fecha');
+    const destinoInput = document.getElementById('cc-destino');
+
+    const desc = descInput.value.trim() || 'Gasto Tarjeta';
+    const monto = parseFloat(montoInput.value) || 0;
+    let fecha = fechaInput.value;
+    const destino = destinoInput.value;
+
+    if (monto <= 0) return alert("Monto inválido.");
+    if (!fecha) {
+        const d = new Date();
+        fecha = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    const data = appData[mesActual];
+    const nuevaTransaccion = {
+        id: Date.now(),
+        desc: destino === 'abono' ? `⬇️ ${desc}` : desc,
+        monto: destino === 'abono' ? -monto : monto,
+        fecha: fecha.slice(5)
+    };
+
+    data.ccHistorial.unshift(nuevaTransaccion);
+    descInput.value = ''; montoInput.value = ''; fechaInput.value = '';
+    updateTopStats();
+    renderHistorialCC();
+}
+
+function eliminarTransaccionCC(idTransaccion) {
+    appData[mesActual].ccHistorial = appData[mesActual].ccHistorial.filter(t => t.id !== idTransaccion);
+    updateTopStats();
+    renderHistorialCC();
+}
+
+function renderHistorialCC() {
+    const data = appData[mesActual];
+    const tbody = document.getElementById('cc-historial-rows');
+    tbody.innerHTML = '';
+    if (data.ccHistorial && data.ccHistorial.length > 0) {
+        data.ccHistorial.forEach(t => {
+            const isAbono = t.monto < 0;
+            tbody.innerHTML += `
+                <tr style="${isAbono ? 'color: var(--ok);' : ''}">
+                    <td>${t.fecha}</td>
+                    <td title="${t.desc}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t.desc}</td>
+                    <td class="text-end fw-bold">${isAbono ? '' : '+'}$${Math.abs(t.monto).toLocaleString()}</td>
+                    <td class="text-center"><button class="btn-delete-row" onclick="eliminarTransaccionCC(${t.id})"><i class="fa-solid fa-trash-can"></i></button></td>
+                </tr>`;
+        });
+    } else {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted" style="font-size:0.65rem; padding-top:20px;">Sin transacciones</td></tr>`;
+    }
+}
+
+function limpiarHistorialCC(e) {
+    e.preventDefault();
+    if(confirm("¿Resetear historial de crédito este mes?")) {
+        appData[mesActual].ccHistorial = [];
+        updateTopStats();
+        renderHistorialCC();
+    }
+}
+
+/* LÓGICA DE AHORRO GLOBAL INTERACTIVO Y ACUMULATIVO */
+function agregarTransaccionAhorro() {
+    const descInput = document.getElementById('ahorro-desc');
+    const montoInput = document.getElementById('ahorro-monto');
+    const fechaInput = document.getElementById('ahorro-fecha');
+    const tipoInput = document.getElementById('ahorro-tipo');
+
+    const desc = descInput.value.trim() || 'Ajuste Ahorro';
+    const monto = parseFloat(montoInput.value) || 0;
+    let fecha = fechaInput.value;
+    const tipo = tipoInput.value;
+
+    if (monto <= 0) return alert("Monto inválido.");
+    if (!fecha) {
+        const d = new Date();
+        fecha = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    const data = appData[mesActual];
+    const nuevoMovimiento = {
+        id: Date.now(),
+        desc: tipo === 'retiro' ? `📤 ${desc}` : `🪙 ${desc}`,
+        monto: tipo === 'retiro' ? -monto : monto,
+        fecha: fecha.slice(5)
+    };
+
+    data.ahorroHistorial.unshift(nuevoMovimiento);
+    descInput.value = ''; montoInput.value = ''; fechaInput.value = '';
+    updateTopStats();
+    renderHistorialAhorro();
+}
+
+function eliminarTransaccionAhorro(idMov) {
+    appData[mesActual].ahorroHistorial = appData[mesActual].ahorroHistorial.filter(t => t.id !== idMov);
+    updateTopStats();
+    renderHistorialAhorro();
+}
+
+function renderHistorialAhorro() {
+    const data = appData[mesActual];
+    const tbody = document.getElementById('ahorro-historial-rows');
+    tbody.innerHTML = '';
+    if (data.ahorroHistorial && data.ahorroHistorial.length > 0) {
+        data.ahorroHistorial.forEach(t => {
+            const isRetiro = t.monto < 0;
+            tbody.innerHTML += `
+                <tr style="${isRetiro ? 'color: var(--credit);' : 'color: #fff;'}">
+                    <td>${t.fecha}</td>
+                    <td title="${t.desc}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${t.desc}</td>
+                    <td class="text-end fw-bold">${isRetiro ? '' : '+'}$${t.monto.toLocaleString()}</td>
+                    <td class="text-center"><button class="btn-delete-row" onclick="eliminarTransaccionAhorro(${t.id})"><i class="fa-solid fa-trash-can"></i></button></td>
+                </tr>`;
+        });
+    } else {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted" style="font-size:0.65rem; padding-top:20px;">Sin ajustes manuales</td></tr>`;
+    }
+}
+
+function limpiarHistorialAhorro(e) {
+    e.preventDefault();
+    if(confirm("¿Deseas vaciar la bitácora de ajustes manuales?")) {
+        appData[mesActual].ahorroHistorial = [];
+        updateTopStats();
+        renderHistorialAhorro();
+    }
+}
+
+function updateTopStats() {
+    const data = appData[mesActual];
+    const sueldoQuincenal = 16500;
+
+    // Tarjeta Crédito
+    let deudaCalculada = 0;
+    if (data.ccHistorial) deudaCalculada = data.ccHistorial.reduce((sum, t) => sum + t.monto, 0);
+    data.ccDeuda = deudaCalculada;
+    const disponibleReal = 15000 - data.ccDeuda;
+    document.getElementById('cc-limite-disponible').innerText = `$${disponibleReal.toLocaleString()}`;
+    document.getElementById('cc-saldo-final').innerText = `$${data.ccDeuda.toLocaleString()}`;
+
+    // Quincena 1
+    let gastosQ1Base = 0;
+    if (data.q1) {
+        data.q1.forEach(sec => { sec.items.forEach(it => { gastosQ1Base += it.v; }); });
+    }
+    let q1DisponibleReal = sueldoQuincenal - gastosQ1Base;
+    document.getElementById('lbl-q1-gastos').innerText = `$${gastosQ1Base.toLocaleString()}`;
+    document.getElementById('lbl-q1-libre').innerText = `$${q1DisponibleReal.toLocaleString()}`;
+
+    // Quincena 2
+    let gastosQ2Base = 0;
+    if (data.q2) {
+        data.q2.forEach(sec => { sec.items.forEach(it => { gastosQ2Base += it.v; }); });
+    }
+    let q2DisponibleReal = sueldoQuincenal - gastosQ2Base;
+    document.getElementById('lbl-q2-gastos').innerText = `$${gastosQ2Base.toLocaleString()}`;
+    document.getElementById('lbl-q2-libre').innerText = `$${q2DisponibleReal.toLocaleString()}`;
+
+    // Bonos
+    let descuentoLimpieza = 0;
+    if (data.limpieza) {
+        data.limpieza.forEach(sec => { sec.items.forEach(it => { if (it.op || it.p) descuentoLimpieza += it.v; }); });
+    }
+    let bonoNetoFinal = (data.bonos || 3400) - descuentoLimpieza;
+    document.getElementById('kpi-bonos-monto').innerText = `$${bonoNetoFinal.toLocaleString()}`;
+    
+    // --- NUEVA INTERCONEXIÓN Y CONTROL ACUMULATIVO DEL AHORRO ---
+    let acumuladoMesesAnteriores = 0;
+    let indexMesActual = nombreMeses.indexOf(mesActual);
+    
+    // Sumamos todo el comportamiento acumulado de meses pasados
+    for (let i = 0; i < indexMesActual; i++) {
+        let mPast = nombreMeses[i];
+        if (appData[mPast]) {
+            // Checkboxes marcados del pasado
+            if (appData[mPast].q1) {
+                appData[mPast].q1.forEach(sec => {
+                    if (sec.cat.toLowerCase().includes('ahorro')) {
+                        sec.items.forEach(it => { if (it.p) acumuladoMesesAnteriores += it.v; });
+                    }
+                });
+            }
+            if (appData[mPast].q2) {
+                appData[mPast].q2.forEach(sec => {
+                    if (sec.cat.toLowerCase().includes('ahorro')) {
+                        sec.items.forEach(it => { if (it.p) acumuladoMesesAnteriores += it.v; });
+                    }
+                });
+            }
+            // Bitácora manual del pasado
+            if (appData[mPast].ahorroHistorial) {
+                acumuladoMesesAnteriores += appData[mPast].ahorroHistorial.reduce((sum, m) => sum + m.monto, 0);
+            }
+        }
+    }
+
+    // Comportamiento del mes en curso
+    let ahorroMesActualCheckboxes = 0;
+    if (data.q1) {
+        data.q1.forEach(sec => {
+            if (sec.cat.toLowerCase().includes('ahorro')) {
+                sec.items.forEach(it => { if (it.p) ahorroMesActualCheckboxes += it.v; });
+            }
+        });
+    }
+    if (data.q2) {
+        data.q2.forEach(sec => {
+            if (sec.cat.toLowerCase().includes('ahorro')) {
+                sec.items.forEach(it => { if (it.p) ahorroMesActualCheckboxes += it.v; });
+            }
+        });
+    }
+
+    let ahorroMesActualManual = 0;
+    if (data.ahorroHistorial) {
+        ahorroMesActualManual = data.ahorroHistorial.reduce((sum, m) => sum + m.monto, 0);
+    }
+
+    // Gran Total Final Integrado y Acumulativo
+    let granTotalAhorro = acumuladoMesesAnteriores + ahorroMesActualCheckboxes + ahorroMesActualManual;
+    document.getElementById('ahorro-total-acumulado').innerText = `$${granTotalAhorro.toLocaleString()}`;
+
+    // Barras de progreso
+    let totalItems = 0, apartadosCount = 0, pagadosCount = 0;
+    [...(data.q1 || []), ...(data.q2 || []), ...(data.limpieza || [])].forEach(sec => {
+        sec.items.forEach(it => {
+            totalItems++;
+            if (it.op) apartadosCount++;
+            if (it.p) pagadosCount++;
+        });
+    });
+
+    if (totalItems > 0) {
+        let pctT = Math.round((apartadosCount / totalItems) * 100);
+        let pctM = Math.round((pagadosCount / totalItems) * 100);
+        document.getElementById('prog-t').style.width = pctT + '%';
+        document.getElementById('prog-t-text').innerText = pctT + '%';
+        document.getElementById('prog-m').style.width = pctM + '%';
+        document.getElementById('prog-m-text').innerText = pctM + '%';
+    }
+
+    save();
+}
+    
 function init() {
     const listD = document.getElementById('month-list-desktop');
     const listM = document.getElementById('month-list-mobile');
     listD.innerHTML = ''; listM.innerHTML = '';
+    
     Object.keys(calendarioNomina).forEach(m => {
+        if (!appData[m]) appData[m] = JSON.parse(JSON.stringify(plantillaMaestra));
+        if (!appData[m].ccHistorial) appData[m].ccHistorial = [];
+        if (!appData[m].ahorroHistorial) appData[m].ahorroHistorial = [];
+        
         const div = document.createElement('div');
         div.className = `nav-item ${m === mesActual ? 'active' : ''}`;
         div.innerHTML = m.toUpperCase();
         div.onclick = () => { mesActual = m; init(); };
         listD.appendChild(div);
+
         const pill = document.createElement('div');
         pill.className = `m-pill ${m === mesActual ? 'active' : ''}`;
         pill.innerHTML = m.toUpperCase();
         pill.onclick = () => { mesActual = m; init(); };
         listM.appendChild(pill);
-        if (!appData[m]) appData[m] = JSON.parse(JSON.stringify(plantillaMaestra));
     });
     render();
-}
-
-function actualizarGastosLimpieza() {
-    const data = appData[mesActual];
-    let totalPagado = 0; // Cambiamos a 'pagado'
-    
-    const seccionLimpieza = data.q2.find(s => s.id === 'q2l');
-    
-    if (seccionLimpieza) {
-        seccionLimpieza.items.forEach(it => {
-            // SI el item está pagado (it.p === true), lo sumamos al gasto
-            if (it.p) totalPagado += it.v;
-        });
-    }
-
-    // Actualizamos el display de "Lo que ya gastaste"
-    const el = document.getElementById('kpi-gastos-limpieza');
-    if (el) el.innerText = `$${totalPagado.toLocaleString()}`;
-    
-    return totalPagado; 
 }
 
 function render() {
     document.getElementById('title-mes').innerText = mesActual.toUpperCase();
     const data = appData[mesActual];
-    const fechas = calendarioNomina[mesActual];
-    document.getElementById('date-q1').innerText = `PAGO: ${fechas.q1}`;
-    document.getElementById('date-q2').innerText = `PAGO: ${fechas.q2}`;
-    ['q1', 'q2'].forEach(q => {
-        const container = document.getElementById(q === 'q1' ? 'accQ1' : 'accQ2');
-        container.innerHTML = '';
-        data[q].forEach((sec, sIdx) => {
-            let totalPendiente = sec.items.reduce((acc, it) => !it.p ? acc + it.v : acc, 0);
-            container.innerHTML += `
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#c-${sec.id}">
-                            <div class="d-flex justify-content-between w-100 pe-3 align-items-center">
-                                <span><i class="fa-solid ${sec.icon} me-3 opacity-50"></i>${sec.cat}</span>
-                                <span class="badge bg-dark text-info border border-info border-opacity-25" id="badge-${sec.id}">$${totalPendiente.toLocaleString()}</span>
-                            </div>
-                        </button>
-                    </h2>
-                    <div id="c-${sec.id}" class="accordion-collapse collapse">
-                        <div class="table-responsive">
-                            <table class="table table-dark table-borderless mb-0" style="font-size: 0.75rem;">
-                                <thead><tr class="text-dim"><th class="ps-4">Apartado</th><th>Concepto</th><th class="text-center pe-4">Monto</th><th>Pagado</th></tr></thead>
-                                <tbody>
-                                ${sec.items.map((it, iIdx) => {
-                                    const isRec = it.n.includes('↳');
-                                    return `
-                                    <tr id="row-${q}-${sIdx}-${iIdx}" class="${it.p ? 'paid' : ''} ${isRec ? 'reciproco-row' : ''}">
-                                        <td class="ps-4"><input type="checkbox" class="form-check-input chk-op" style="accent-color: var(--accent-cyan)" ${it.op?'checked':''} onclick="toggle(event, '${q}',${sIdx},${iIdx},'op')"></td>
-                                        <td class="py-2 ${isRec ? 'reciproco-text' : ''}">${it.n}</td>
-                                        <td class="text-center pe-4"><input type="number" class="input-price" value="${it.v}" onclick="event.stopPropagation()" onchange="updateVal('${q}',${sIdx},${iIdx},'v',this.value)"></td>
-                                        <td><input type="checkbox" class="form-check-input chk-pay" style="accent-color: var(--ok)" ${it.p?'checked':''} onclick="toggle(event, '${q}',${sIdx},${iIdx},'p')"></td>
-                                    </tr>`;
-                                }).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>`;
-        });
-    });
-    updateTopStats();
-}
-function toggle(event, q, sIdx, iIdx, type) {
-    event.stopPropagation();
-    const item = appData[mesActual][q][sIdx].items[iIdx];
-    item[type] = !item[type];
-    if (type === 'p') {
-        const row = document.getElementById(`row-${q}-${sIdx}-${iIdx}`);
-        if (item.p) row.classList.add('paid'); else row.classList.remove('paid');
-        const sec = appData[mesActual][q][sIdx];
-        const nuevoTotal = sec.items.reduce((acc, it) => !it.p ? acc + it.v : acc, 0);
-        document.getElementById(`badge-${sec.id}`).innerText = `$${nuevoTotal.toLocaleString()}`;
+    
+    const abierto = document.querySelector('.accordion-collapse.show');
+    const idAbierto = abierto ? abierto.id : null;
+
+    if (calendarioNomina[mesActual]) {
+        document.getElementById('date-q1').innerText = `Cobro: ${calendarioNomina[mesActual].q1}`;
+        document.getElementById('date-q2').innerText = `Cobro: ${calendarioNomina[mesActual].q2}`;
     }
+
+    const hoy = new Date().getDate();
+    const divLimpieza = document.getElementById('seccion-limpieza-condicional');
+    if (hoy >= 15) {
+        divLimpieza.style.display = 'block';
+        renderSeccion(data.limpieza, 'accLimpieza');
+    } else {
+        divLimpieza.style.display = 'none';
+    }
+    renderSeccion(data.q1, 'accQ1');
+    renderSeccion(data.q2, 'accQ2');
+    
+    if (idAbierto) {
+        const elementoFocal = document.getElementById(idAbierto);
+        if (elementoFocal) {
+            elementoFocal.classList.add('show');
+            const boton = document.querySelector(`[data-bs-target="#${idAbierto}"]`);
+            if (boton) boton.classList.remove('collapsed');
+        }
+    }
+
+    renderHistorialCC();
+    renderHistorialAhorro();
     updateTopStats();
 }
-function updateVal(q, sIdx, iIdx, key, val) {
-    appData[mesActual][q][sIdx].items[iIdx][key] = (key === 'v') ? parseFloat(val) || 0 : val;
-    const sec = appData[mesActual][q][sIdx];
-    const nuevoTotal = sec.items.reduce((acc, it) => !it.p ? acc + it.v : acc, 0);
-    document.getElementById(`badge-${sec.id}`).innerText = `$${nuevoTotal.toLocaleString()}`;
-    updateTopStats();
+
+function renderSeccion(secciones, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    secciones.forEach((sec, sIdx) => {
+        let total = sec.items.reduce((acc, it) => !it.p ? acc + it.v : acc, 0);
+        container.innerHTML += `
+            <div class="accordion-item">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#c-${sec.id}">
+                    <div class="d-flex justify-content-between w-100 pe-3">
+                        <span><i class="fa-solid ${sec.icon} me-3 opacity-50"></i>${sec.cat}</span>
+                        <span class="badge bg-dark text-info">$${total.toLocaleString()}</span>
+                    </div>
+                </button>
+                <div id="c-${sec.id}" class="accordion-collapse collapse">
+                    <table class="table table-dark table-borderless mb-0 small">
+                        ${sec.items.map((it, iIdx) => `
+                            <tr class="${it.p ? 'paid' : ''}">
+                                <td class="ps-4"><input type="checkbox" ${it.op?'checked':''} onclick="toggleItem('${containerId}',${sIdx},${iIdx},'op')"></td>
+                                <td>${it.n}</td>
+                                <td>$${it.v}</td>
+                                <td class="pe-4"><input type="checkbox" ${it.p?'checked':''} onclick="toggleItem('${containerId}',${sIdx},${iIdx},'p')"></td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                </div>
+            </div>`;
+    });
+}
+    
+function toggleItem(cId, sIdx, iIdx, type) {
+    let key = (cId === 'accQ1') ? 'q1' : (cId === 'accQ2') ? 'q2' : 'limpieza';
+    appData[mesActual][key][sIdx].items[iIdx][type] = !appData[mesActual][key][sIdx].items[iIdx][type];
+    render();
 }
 
-function updateTopStats() {
-    const data = appData[mesActual];
-    let q1G = 0, q2G = 0, pT = 0, iT = 0, oT = 0;
-
-    ['q1', 'q2'].forEach(q => {
-        data[q].forEach(s => {
-            // EXCLUSIÓN DE LIMPIEZA MANDADO (q2l) para el cálculo general
-            if (s.id === 'q2l') return;
-            
-            s.items.forEach(it => {
-                iT++; 
-                if (q === 'q1') q1G += it.v; else q2G += it.v;
-                if (it.op) oT++; 
-                if (it.p) pT += it.v;
-            });
-        });
-    });
-
-    // 1. Cálculos de Libres y Gastos
-    document.getElementById('kpi-q1-libre').innerText = `$${(data.ingreso - q1G).toLocaleString()}`;
-    document.getElementById('kpi-q1-gastos').innerText = `$${q1G.toLocaleString()}`;
-    document.getElementById('kpi-q2-libre').innerText = `$${((data.ingreso + (mesActual === "Mayo" ? data.bonos : 0)) - q2G).toLocaleString()}`;
-    document.getElementById('kpi-q2-gastos').innerText = `$${q2G.toLocaleString()}`;
-
-    // 2. CÁLCULO DE BONOS NETOS
-    // Primero obtenemos el total de gastos de limpieza actuales
-    const gastosLimpieza = actualizarGastosLimpieza();
-    const bonosBase = data.bonos || 0;
-    const bonosNetos = bonosBase - gastosLimpieza;
-
-    // Mostramos el resultado de la resta en tu tarjeta de bonos
-    document.getElementById('kpi-bonos-monto').innerText = `$${bonosNetos.toLocaleString()}`;
-
-    // 3. Cálculos globales y progresos
-    let global = 0;
-    Object.keys(appData).forEach(m => {
-        let ah = 0;
-        ['q1','q2'].forEach(q => { 
-            if(appData[m][q]) appData[m][q].forEach(s => { 
-                if(s.id !== 'q2l') s.items.forEach(it => { if(it.p && s.cat.includes("Ahorro")) ah += it.v; })});
-        });
-        global += (ah - (appData[m].retiroAhorro || 0));
-    });
-
-    document.getElementById('kpi-ahorro-global').innerText = `$${global.toLocaleString()}`;
-
-    let pOps = Math.round((oT / iT) * 100) || 0;
-    document.getElementById('prog-t').style.width = pOps + '%';
-    document.getElementById('prog-t-text').innerText = `${pOps}% (${oT}/${iT})`;
-
-    let pPay = Math.round((pT / (q1G + q2G)) * 100) || 0;
-    document.getElementById('prog-m').style.width = pPay + '%';
-    document.getElementById('prog-m-text').innerText = `${pPay}% ($${pT.toLocaleString()})`;
-}
-
-function updateRetiroMes(v) { appData[mesActual].retiroAhorro = parseFloat(v) || 0; updateTopStats(); }
-function save() { localStorage.setItem('finanzas_v8_3', JSON.stringify(appData)); alert("SYSTEM_SYNC: OK."); }
 init();
-function toggleAI() { const term = document.getElementById('aiTerminal'); term.style.display = (term.style.display === 'flex') ? 'none' : 'flex'; }
-function generarPrediccion() {
-    const data = appData[mesActual];
-    const aiBody = document.getElementById('aiBody');
-    let totalEgresos = 0;
-    data.q1.forEach(s => s.items.forEach(i => totalEgresos += i.v));
-    data.q2.forEach(s => s.items.forEach(i => totalEgresos += i.v));
-    const ratioAhorro = (2000 / (data.ingreso * 2)) * 100;
-    aiBody.innerHTML = `
-        <div class="ai-sugerencia"><b class="text-info">💡 PREDICCIÓN DE FLUJO:</b><br>Si mantienes el gasto de $${totalEgresos.toLocaleString()}, tu capacidad de ahorro real es del ${ratioAhorro.toFixed(1)}%.</div>
-        <div class="ai-sugerencia" style="border-color: #ffc107"><b class="text-warning">⚠️ ALERTA DE SUSCRIPCIONES:</b><br>Detecto servicios digitales. Omitir alguno sube tu fondo un 5%.</div>
-        <button class="btn btn-info btn-sm w-100" onclick="copyDataForIA()">COPIAR DATA PARA CHATBOT</button>
-    `;
-}
-function copyDataForIA() { const dataString = JSON.stringify(appData[mesActual]); navigator.clipboard.writeText("Analiza mi presupuesto de RuizOs: " + dataString); alert("¡Datos listos!"); }
+
+document.addEventListener('click', function(event) {
+    if (event.target && event.target.classList.contains('stop-accordion')) {
+        event.stopPropagation();
+    }
+});
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+</html>
