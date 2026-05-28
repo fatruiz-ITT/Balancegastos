@@ -477,7 +477,7 @@ function updateTopStats() {
     let deudaCalculada = 0;
     if (data.ccHistorial) deudaCalculada = data.ccHistorial.reduce((sum, t) => sum + t.monto, 0);
     data.ccDeuda = deudaCalculada;
-    const disponibleReal = 15000 - data.ccDeuda;
+    const disponibleReal = 30000 - data.ccDeuda;
     document.getElementById('cc-limite-disponible').innerText = `$${disponibleReal.toLocaleString()}`;
     document.getElementById('cc-saldo-final').innerText = `$${data.ccDeuda.toLocaleString()}`;
 
