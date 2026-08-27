@@ -1,20 +1,20 @@
 {
   "name": "RuizOs Finances",
   "short_name": "Control de Gastos",
-  "start_url": "Gastos.html",
+  "start_url": "./Gastos.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0a0c12",
   "theme_color": "#0a0c12",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3061/3061320.png",
+      "src": "https://lh3.googleusercontent.com/d/1m7ZAjvxeVYm4AP-kVvtgvrwvQqDkADsT",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3061/3061320.png",
+      "src": "https://lh3.googleusercontent.com/d/1m7ZAjvxeVYm4AP-kVvtgvrwvQqDkADsT",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
